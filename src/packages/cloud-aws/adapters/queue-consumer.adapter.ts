@@ -189,14 +189,14 @@ export class AwsQueueConsumerAdapter implements QueueConsumerPort {
 
       // Solicitar mensajes a SQS
       const response = await this.sqsClient.send(command);
-
+      console.log('response', response);
       // Procesar mensajes si hay alguno
       if (response.Messages && response.Messages.length > 0) {
         this.logger.log(`Received ${response.Messages.length} message(s)`);
-
+        
         // Procesar todos los mensajes en paralelo para mejor throughput
         await Promise.all(
-          response.Messages.map((message) => this.processMessage(message)),
+          response.Messages.map((message) => this.handleSQSMessage(message)),
         );
       }
     } catch (error) {
@@ -215,7 +215,7 @@ export class AwsQueueConsumerAdapter implements QueueConsumerPort {
   }
 
   /**
-   * Procesa un mensaje individual de SQS
+   * Maneja un mensaje individual de SQS
    *
    * Este método prepara el mensaje y lo pasa al handler registrado por el usuario.
    * El handler decide si hacer ACK (eliminar) o NACK (devolver a la cola).
@@ -233,7 +233,7 @@ export class AwsQueueConsumerAdapter implements QueueConsumerPort {
    *
    * @param message - Mensaje de SQS a procesar
    */
-  private async processMessage(message: Message): Promise<void> {
+  private async handleSQSMessage(message: Message): Promise<void> {
     // Validar que tengamos lo necesario para procesar
     if (!this.messageHandler || !message.MessageId || !message.ReceiptHandle) {
       return;
@@ -268,9 +268,10 @@ export class AwsQueueConsumerAdapter implements QueueConsumerPort {
       };
 
       // Paso 4: Llamar al handler del usuario con el mensaje preparado
+      const detail = JSON.parse(data.toString('utf-8')).detail;
       await this.messageHandler({
         id: messageId,
-        data,
+        data: detail,
         attrs,
         ack,
         nack,

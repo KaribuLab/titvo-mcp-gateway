@@ -1,15 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
-import type { Context } from '@rekog/mcp-nest';
+import { Inject, Injectable } from "@nestjs/common";
+import type { Context } from "@rekog/mcp-nest";
 import {
   JOB_PERSISTENCE,
   PUBLISH_EVENT,
-} from '../../packages/cloud-contracts/constants/injection-tokens';
-import { JobPersistencePort } from '../../packages/cloud-contracts/ports/job-persistence.port';
-import { PublishEventPort } from '../../packages/cloud-contracts/ports/publish-event.port';
-import { ContextService } from '../../shared/services/context.service';
-import { InvokeTool } from '../decorators/invoke-tool.decorator';
-import { GetCommitInputDto } from '../../core/invocations/dto/get-commit-input.dto';
-import { IssueReportInputDto } from '../../core/invocations/dto/issue-report-input.dto';
+} from "../../packages/cloud-contracts/constants/injection-tokens";
+import { JobPersistencePort } from "../../packages/cloud-contracts/ports/job-persistence.port";
+import { PublishEventPort } from "../../packages/cloud-contracts/ports/publish-event.port";
+import { ContextService } from "../../shared/services/context.service";
+import { InvokeTool } from "../decorators/invoke-tool.decorator";
+import { GetCommitInputDto } from "../../core/invocations/dto/get-commit-input.dto";
+import { IssueReportInputDto } from "../../core/invocations/dto/issue-report-input.dto";
+import { BitbucketCodeInsightsInputDto } from "src/core/invocations/dto/bitbucket-code-insights-input.dto";
+import { GithubIssueInputDto } from "src/core/invocations/dto/github-issue-input.dto";
 
 /**
  * InvokeToolService - Servicio que expone tools MCP para invocar operaciones
@@ -37,10 +39,10 @@ import { IssueReportInputDto } from '../../core/invocations/dto/issue-report-inp
  * @example
  * // Agregar un nuevo tool:
  * @InvokeTool({
- *   name: 'my-new-tool',
- *   description: 'Description of what the tool does',
+ *   name: "my-new-tool",
+ *   description: "Description of what the tool does",
  *   dtoClass: MyInputDto,
- *   title: 'Execute my tool',
+ *   title: "Execute my tool",
  * })
  * async myNewTool(input: MyInputDto, context: Context) {}
  */
@@ -60,16 +62,16 @@ export class InvokeToolService {
    * desde un repositorio Git (archivos modificados, autor, mensaje, etc.)
    */
   @InvokeTool({
-    name: 'invoke-get-commit-data',
-    description: 'Invokes an tool to get the commit data from a repository',
+    name: "mcp.tool.git.commit-files",
+    description: "Invokes an tool to get the commit data from a repository",
     dtoClass: GetCommitInputDto,
-    title: 'Execute get commit data tool',
+    title: "Execute get commit data tool",
     destructiveHint: false,
     readOnlyHint: true,
     idempotentHint: true,
     openWorldHint: false,
   })
-  async getCommitDataInvoke(input: GetCommitInputDto, context: Context) {}
+  async toolGitCommitFiles(input: GetCommitInputDto, context: Context) {}
 
   /**
    * Tool: Generar reporte desde lista de anotaciones
@@ -78,14 +80,39 @@ export class InvokeToolService {
    * de una lista de anotaciones (issues, warnings, etc.)
    */
   @InvokeTool({
-    name: 'invoke-get-report',
-    description: 'Invokes a tool to get a report from a annotations list',
+    name: "mcp.tool.issue.report",
+    description: "Invokes a tool to get a report from a annotations list",
     dtoClass: IssueReportInputDto,
-    title: 'Execute get report tool',
+    title: "Execute get report tool",
     destructiveHint: false,
     readOnlyHint: true,
     idempotentHint: true,
     openWorldHint: false,
   })
-  async exampleInvoke(input: IssueReportInputDto, context: Context) {}
+  async toolIssueReport(input: IssueReportInputDto, context: Context) {}
+
+
+  @InvokeTool({
+    name: "mcp.tool.bitbucket.code-insights",
+    description: "Invokes a tool to get a code insights from a repository",
+    dtoClass: BitbucketCodeInsightsInputDto,
+    title: "Execute get code insights tool",
+    destructiveHint: false,
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  })
+  async toolBitbucketCodeInsights(input: BitbucketCodeInsightsInputDto,context: Context) {}
+
+  @InvokeTool({
+    name: "mcp.tool.github.issue",
+    description: "Invokes a tool to get a issue from a repository",
+    dtoClass: GithubIssueInputDto,
+    title: "Execute get issue tool",
+    destructiveHint: false,
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  })
+  async toolGithubIssue(input: GithubIssueInputDto, context: Context) {}
 }

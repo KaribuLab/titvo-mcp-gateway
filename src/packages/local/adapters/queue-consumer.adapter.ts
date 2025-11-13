@@ -215,12 +215,6 @@ export class LocalQueueConsumerAdapter implements QueueConsumerPort {
     const jobId = job.id || 'unknown';
 
     try {
-      // Paso 1: Extraer datos del job
-      const data = job.data;
-
-      // Paso 2: Convertir data a Buffer (para mantener compatibilidad con el port)
-      const dataBuffer = Buffer.from(JSON.stringify(data), 'utf-8');
-
       // Paso 3: Extraer atributos/metadata
       // En BullMQ no hay "attributes" nativos, pero podemos usar job.name y otros
       const attrs: Record<string, string> = {
@@ -245,7 +239,7 @@ export class LocalQueueConsumerAdapter implements QueueConsumerPort {
       // Paso 5: Llamar al handler del usuario con el job preparado
       await this.messageHandler({
         id: jobId,
-        data: dataBuffer,
+        data: job.data,
         attrs,
         ack,
         nack,

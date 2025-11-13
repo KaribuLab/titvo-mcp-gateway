@@ -9,6 +9,7 @@ import { InvokeInputFactory } from '../../../shared/helpers/invoke-input.factory
 import { MessageConverterHelper } from '../../../shared/helpers/message-converter.helper';
 import { InvokeOutputDto } from '../../../core/invocations/dto/invoke-output.dto';
 import { AwsOptions } from '../types/aws-options.interface';
+import { Console } from 'console';
 
 /**
  * AwsPublishEventAdapter - Implementación de PublishEventPort para AWS EventBridge
@@ -79,11 +80,12 @@ export class AwsPublishEventAdapter implements PublishEventPort {
       // Paso 1: Construir la entrada del evento
       const input = InvokeInputFactory.create(topic, payload);
       const entry: PutEventsRequestEntry = {
-        Source: 'mcp-gateway', // Identificador de la aplicación que envía el evento
-        DetailType: topic, // Tipo de evento (ej: 'user.created', 'order.placed')
+        Source: topic, // Identificador de la aplicación que envía el evento
+        DetailType: "input", // Tipo de evento (ej: 'user.created', 'order.placed')
         Detail: JSON.stringify(MessageConverterHelper.convertToMessage(input)), // Payload serializado a JSON
         EventBusName: this.eventBusName, // EventBus de destino
       };
+      console.log('entry', entry);
 
       // Paso 2: Agregar atributos como recursos si se proporcionan
       // Los atributos se mapean a Resources para filtrado en EventBridge

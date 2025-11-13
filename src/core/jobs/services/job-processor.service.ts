@@ -86,13 +86,13 @@ export class JobProcessorService implements OnModuleInit, OnModuleDestroy {
    */
   private async processMessage(msg: {
     id: string;
-    data: Buffer;
+    data: any;
     attrs: Record<string, string>;
     ack: () => Promise<void>;
     nack: () => Promise<void>;
   }) {
     // 4. Parsear el mensaje
-    const output = JSON.parse(msg.data.toString('utf-8')) as {
+    const output = msg.data as {
       job_id: string;
       data: unknown;
       success: boolean;
