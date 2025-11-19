@@ -3,6 +3,7 @@ import type { Context } from '@rekog/mcp-nest';
 import { Tool } from '@rekog/mcp-nest';
 import { JobPersistencePort } from '../../packages/cloud-contracts/ports/job-persistence.port';
 import { SchemaDto } from '../../shared/dto/schema.dto';
+import { JobStatus } from '../../core/invocations/dto/job-status.enum';
 
 /**
  * Opciones para el decorador @PollAsyncTool
@@ -111,11 +112,11 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
 
       // Asignar status siempre
       if ('status' in output) {
-        (output as { status: string }).status = job.status;
+        (output as { status: JobStatus }).status = job.status as JobStatus;
       }
 
       // Si el job terminó exitosamente, asignar resultado
-      if (job.status === 'SUCCESS') {
+      if (job.status === JobStatus.SUCCESS) {
         console.log(
           `[${options.name}] Job ${jobId} completed successfully`,
         );
@@ -130,13 +131,13 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
         if (resultToAssign) {
           Object.assign(output, resultToAssign);
         }
-      } else if (job.status === 'REQUESTED' || job.status === 'IN_PROGRESS') {
+      } else if (job.status === JobStatus.REQUESTED || job.status === JobStatus.IN_PROGRESS) {
         // Job en progreso - retornar objeto con status para que el agente sepa que debe esperar
         console.log(
           `[${options.name}] Job ${jobId} is still ${job.status.toLowerCase()}. Progress: ${job.progress}%.`,
         );
         // No asignar resultado, solo status y jobId
-      } else if (job.status === 'FAILURE') {
+      } else if (job.status === JobStatus.FAILURE) {
         // Job falló - retornar objeto con status FAILURE
         console.error(
           `[${options.name}] Job ${jobId} failed: ${job.message || 'Unknown error'}`,
