@@ -29,3 +29,10 @@ export const QUEUE_CONSUMER = Symbol('QUEUE_CONSUMER');
  * Futuro: AwsJobPersistenceAdapter (DynamoDB), GcpJobPersistenceAdapter (Firestore), etc.
  */
 export const JOB_PERSISTENCE = Symbol('JOB_PERSISTENCE');
+
+/**
+ * Token para el servicio de obtención de datos de un archivo
+ * Implementado por: AwsGetDataFromFileAdapter (AWS S3)
+ * Futuro: GcpGetDataFromFileAdapter (GCP Storage), AzureGetDataFromFileAdapter (Azure Blob Storage), etc.
+ */
+export const GET_DATA_FROM_FILE = Symbol('GET_DATA_FROM_FILE');

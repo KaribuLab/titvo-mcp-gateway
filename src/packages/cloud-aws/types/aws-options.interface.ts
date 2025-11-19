@@ -31,4 +31,10 @@ export interface AwsOptions {
    * @example 'jobs', 'my-jobs-table'
    */
   jobTableName?: string;
+
+  /**
+   * Nombre del bucket S3 para archivos
+   * @example 'tvo-mcp-git-commit-files-input-local'
+   */
+  s3BucketName?: string;
 }

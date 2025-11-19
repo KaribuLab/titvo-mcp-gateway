@@ -8,6 +8,7 @@ import { ContextService } from './shared/services/context.service';
 import { JobProcessorService } from './core/jobs/services/job-processor.service';
 import { JobResource } from './mcp/resources/job.resource';
 import { InvokeToolService } from './mcp/tools/invoke-tool.service';
+import { FilesService } from './mcp/tools/files.service';
 
 /**
  * AppModule - Módulo principal de la aplicación MCP Gateway
@@ -60,6 +61,7 @@ import { InvokeToolService } from './mcp/tools/invoke-tool.service';
     InvokeToolService,
     JobResource,
     JobProcessorService,
+    FilesService,
   ],
 })
 export class AppModule {}

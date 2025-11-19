@@ -63,9 +63,9 @@ export class InvokeToolService {
    */
   @InvokeTool({
     name: "mcp.tool.git.commit-files",
-    description: "Invokes an tool to get the commit data from a repository",
+    description: "Invokes an tool to get the commit data from a repository, save the files in a container and return its exact ids",
     dtoClass: GetCommitInputDto,
-    title: "Execute get commit data tool",
+    title: "Execute get commit files tool and save files in a container",
     destructiveHint: false,
     readOnlyHint: true,
     idempotentHint: true,

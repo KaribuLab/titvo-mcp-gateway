@@ -1,6 +1,7 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
+  GET_DATA_FROM_FILE,
   JOB_PERSISTENCE,
   PUBLISH_EVENT,
   QUEUE_CONSUMER,
@@ -16,6 +17,8 @@ import { AwsOptions } from '../types/aws-options.interface';
 import { AwsJobPersistenceAdapter } from '../adapters/job-persistence.adapter';
 import { AwsPublishEventAdapter } from '../adapters/publish-event.adapter';
 import { AwsQueueConsumerAdapter } from '../adapters/queue-consumer.adapter';
+import { GetDataFromFilePort } from 'src/packages/cloud-contracts/ports/get-data-from-file.port';
+import { AwsGetDataFromFileAdapter } from '../adapters/get-data-from-file.adapter';
 
 /**
  * AwsModule - Módulo de integración con AWS
@@ -59,7 +62,7 @@ export class AwsModule {
         // Paso 1: Validar que todas las variables requeridas estén presentes
         const envVars = validateRequiredEnvVars(
           configService,
-          ['AWS_REGION', 'AWS_EVENTBUS_NAME', 'AWS_QUEUE_URL', 'AWS_DYNAMODB_TABLE_NAME'],
+          ['AWS_REGION', 'AWS_EVENTBUS_NAME', 'AWS_QUEUE_URL', 'AWS_DYNAMODB_TABLE_NAME', 'AWS_S3_BUCKET_NAME'],
           'AWS',
         );
 
@@ -72,6 +75,7 @@ export class AwsModule {
           eventBusName: envVars.AWS_EVENTBUS_NAME,
           queueUrl: envVars.AWS_QUEUE_URL,
           jobTableName: envVars.AWS_DYNAMODB_TABLE_NAME,
+          s3BucketName: envVars.AWS_S3_BUCKET_NAME,
         };
       },
       inject: [ConfigService],
@@ -113,6 +117,18 @@ export class AwsModule {
       inject: ['AWS_OPTIONS'],
     };
 
+        /**
+     * Provider de persistencia de mensajes (DynamoDB)
+     *
+     * Crea una instancia del adapter que persiste mensajes en DynamoDB.
+     */
+    const getDataFromFileProvider: Provider = {
+      provide: GET_DATA_FROM_FILE,
+      useFactory: (options: AwsOptions): GetDataFromFilePort =>
+        new AwsGetDataFromFileAdapter(options),
+      inject: ['AWS_OPTIONS'],
+    };
+
     // Retornar módulo dinámico con todos los providers
     return {
       module: AwsModule,
@@ -121,8 +137,9 @@ export class AwsModule {
         publishEventProvider,
         consumerQueueProvider,
         jobPersistenceProvider,
+        getDataFromFileProvider,
       ],
-      exports: [PUBLISH_EVENT, QUEUE_CONSUMER, JOB_PERSISTENCE], // Exportar para inyección en otros módulos
+      exports: [PUBLISH_EVENT, QUEUE_CONSUMER, JOB_PERSISTENCE, GET_DATA_FROM_FILE], // Exportar para inyección en otros módulos
     };
   }
 }
