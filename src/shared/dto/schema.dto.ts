@@ -10,6 +10,7 @@ import {
   EnumFieldOptions,
   ArrayFieldOptions,
   ObjectFieldOptions,
+  AnyFieldOptions,
 } from '../dto/decorators/field.decorator';
 
 /**
@@ -104,6 +105,9 @@ export abstract class SchemaDto {
 
       case 'object':
         return this.buildObjectSchema(options as ObjectFieldOptions);
+
+      case 'any':
+        return this.buildAnySchema(options as AnyFieldOptions);
 
       default:
         throw new Error(`Unsupported field type: ${type}`);
@@ -207,14 +211,24 @@ export abstract class SchemaDto {
    * Construye schema Zod para campo Array
    */
   private static buildArraySchema(options: ArrayFieldOptions): z.ZodType {
-    // El itemType debe ser una clase que también extiende SchemaDto
-    if (!options.itemType || typeof options.itemType.schema !== 'function') {
+    let itemSchema: z.ZodType;
+
+    // Detectar si itemType es un tipo primitivo o una clase SchemaDto
+    if (options.itemType === String) {
+      itemSchema = z.string();
+    } else if (options.itemType === Number) {
+      itemSchema = z.number();
+    } else if (options.itemType === Boolean) {
+      itemSchema = z.boolean();
+    } else if (typeof options.itemType === 'function' && typeof options.itemType.schema === 'function') {
+      // Es una clase que extiende SchemaDto
+      itemSchema = options.itemType.schema();
+    } else {
       throw new Error(
-        `ArrayField itemType must be a class extending SchemaDto with a schema() method`,
+        `ArrayField itemType must be a primitive type (String, Number, Boolean) or a class extending SchemaDto with a schema() method`,
       );
     }
 
-    const itemSchema = options.itemType.schema();
     let schema = z.array(itemSchema).describe(options.description);
 
     // Aplicar validaciones
@@ -252,6 +266,20 @@ export abstract class SchemaDto {
     }
 
     const schema = options.type.schema().describe(options.description);
+
+    // Si no es requerido, hacerlo opcional
+    if (options.required === false) {
+      return schema.optional();
+    }
+
+    return schema;
+  }
+
+  /**
+   * Construye schema Zod para campo Any (sin validación estricta)
+   */
+  private static buildAnySchema(options: AnyFieldOptions): z.ZodType {
+    let schema = z.any().describe(options.description);
 
     // Si no es requerido, hacerlo opcional
     if (options.required === false) {

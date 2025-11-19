@@ -58,11 +58,11 @@ export class FilesService {
    */
   @Tool({
     name: "mcp.tool.files",
-    description: "Get data from a file in a container by its exact id",
+    description: "Get data from files path returned by the array filesPaths from mcp.tool.git.commit-files.poll result. First invoke mcp.tool.git.commit-files, then use the pollToolName returned to get the filesPaths array, then use this tool with each path from that array.",
     parameters: GetDataFromFileInputDto.schema(),
     outputSchema: GetDataFromFileOutputDto.schema(),
     annotations: {
-      title: "Execute get data from file tool by its exact id",
+      title: "Execute get data from files path returned by the array filesPaths from mcp.tool.git.commit-files.poll result",
       destructiveHint: false,
       readOnlyHint: true,
       idempotentHint: true,

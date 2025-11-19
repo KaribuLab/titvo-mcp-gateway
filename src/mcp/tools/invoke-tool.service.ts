@@ -8,10 +8,14 @@ import { JobPersistencePort } from "../../packages/cloud-contracts/ports/job-per
 import { PublishEventPort } from "../../packages/cloud-contracts/ports/publish-event.port";
 import { ContextService } from "../../shared/services/context.service";
 import { InvokeTool } from "../decorators/invoke-tool.decorator";
+import { InvokeAsyncTool } from "../decorators/invoke-async-tool.decorator";
+import { PollAsyncTool } from "../decorators/poll-async-tool.decorator";
 import { GetCommitInputDto } from "../../core/invocations/dto/get-commit-input.dto";
 import { IssueReportInputDto } from "../../core/invocations/dto/issue-report-input.dto";
 import { BitbucketCodeInsightsInputDto } from "src/core/invocations/dto/bitbucket-code-insights-input.dto";
 import { GithubIssueInputDto } from "src/core/invocations/dto/github-issue-input.dto";
+import { WaitJobInputDto } from "../../core/invocations/dto/wait-job-input.dto";
+import { GitCommitFilesOutputDto } from "../../core/invocations/dto/git-commit-files-output.dto";
 
 /**
  * InvokeToolService - Servicio que expone tools MCP para invocar operaciones
@@ -61,10 +65,11 @@ export class InvokeToolService {
    * Invoca una operación para extraer información de un commit específico
    * desde un repositorio Git (archivos modificados, autor, mensaje, etc.)
    */
-  @InvokeTool({
+  @InvokeAsyncTool({
     name: "mcp.tool.git.commit-files",
-    description: "Invokes an tool to get the commit data from a repository, save the files in a container and return its exact ids",
+    description: "Invokes an tool to get the commit data from a repository, save the files in a container and return its exact ids. This tool returns a jobId and pollToolName immediately. You MUST use the pollToolName returned with the jobId to get the filesPaths array before using mcp.tool.files.",
     dtoClass: GetCommitInputDto,
+    pollToolName: "mcp.tool.git.commit-files.poll",
     title: "Execute get commit files tool and save files in a container",
     destructiveHint: false,
     readOnlyHint: true,
@@ -72,6 +77,56 @@ export class InvokeToolService {
     openWorldHint: false,
   })
   async toolGitCommitFiles(input: GetCommitInputDto, context: Context) {}
+
+  /**
+   * Tool: Hacer polling del resultado de git commit-files
+   *
+   * Hace polling del estado de un job de git commit-files hasta que termine (SUCCESS o FAILURE).
+   * Usa internamente el resource MCP estándar `job://{jobId}` a través de JobPersistencePort.
+   *
+   * @param input - DTO con el jobId a esperar
+   * @param context - Contexto MCP
+   * @returns Resultado completo con jobId, filesPaths y commitId
+   * @throws Error si el job no existe, timeout o falla
+   */
+  @PollAsyncTool({
+    name: 'mcp.tool.git.commit-files.poll',
+    description:
+      'Check the status of a git commit-files job. Use this tool with the jobId returned by mcp.tool.git.commit-files. The response includes a "status" field that indicates the job state: "REQUESTED" or "IN_PROGRESS" means the job is still processing (call this tool again later), "SUCCESS" means the job completed and filesPaths/commitId are available, "FAILURE" means the job failed. Keep calling this tool until status is "SUCCESS" or "FAILURE".',
+    dtoClass: WaitJobInputDto,
+    outputSchemaClass: GitCommitFilesOutputDto,
+    resultMapper: (result: any) => {
+      // Mapear campos snake_case a camelCase
+      const mapped: any = { ...result };
+      
+      // Mapear commit_id -> commitId
+      if ('commit_id' in mapped && !('commitId' in mapped)) {
+        mapped.commitId = mapped.commit_id;
+        delete mapped.commit_id;
+      }
+      
+      // Mapear files_paths -> filesPaths
+      if ('files_paths' in mapped && !('filesPaths' in mapped)) {
+        mapped.filesPaths = mapped.files_paths;
+        delete mapped.files_paths;
+      }
+      
+      return mapped;
+    },
+    title: 'Get git commit files result',
+    destructiveHint: false,
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  })
+  async pollGitCommitFiles(
+    input: WaitJobInputDto,
+    context: Context,
+  ): Promise<GitCommitFilesOutputDto> {
+    // El decorador @PollAsyncTool maneja toda la lógica de polling automáticamente
+    // Este método nunca se ejecuta directamente, el decorador lo reemplaza completamente
+    return {} as GitCommitFilesOutputDto;
+  }
 
   /**
    * Tool: Generar reporte desde lista de anotaciones

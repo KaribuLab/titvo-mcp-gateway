@@ -129,6 +129,16 @@ export interface ObjectFieldOptions {
 }
 
 /**
+ * Opciones para campos de tipo Any (sin validación estricta)
+ */
+export interface AnyFieldOptions {
+  /** Descripción del campo para documentación */
+  description: string;
+  /** Si el campo es requerido (default: true) */
+  required?: boolean;
+}
+
+/**
  * Decorador para campos de tipo String
  *
  * Almacena metadata sobre el campo que será usada por SchemaDto.schema()
@@ -271,6 +281,33 @@ export function ArrayField(options: ArrayFieldOptions) {
 export function ObjectField(options: ObjectFieldOptions) {
   return function (target: object, propertyKey: string) {
     Reflect.defineMetadata(FIELD_TYPE, 'object', target, propertyKey);
+    Reflect.defineMetadata(FIELD_OPTIONS, options, target, propertyKey);
+
+    const existingFields =
+      (Reflect.getMetadata(FIELDS_LIST, target) as string[]) || [];
+    if (!existingFields.includes(propertyKey)) {
+      Reflect.defineMetadata(
+        FIELDS_LIST,
+        [...existingFields, propertyKey],
+        target,
+      );
+    }
+  };
+}
+
+/**
+ * Decorador para campos de tipo Any (sin validación estricta)
+ *
+ * Útil para campos que pueden contener cualquier tipo de dato,
+ * como resultados de jobs que varían según el tipo de job.
+ *
+ * @example
+ * @AnyField({ description: 'Job result (structure varies by job type)' })
+ * result: any;
+ */
+export function AnyField(options: AnyFieldOptions) {
+  return function (target: object, propertyKey: string) {
+    Reflect.defineMetadata(FIELD_TYPE, 'any', target, propertyKey);
     Reflect.defineMetadata(FIELD_OPTIONS, options, target, propertyKey);
 
     const existingFields =
