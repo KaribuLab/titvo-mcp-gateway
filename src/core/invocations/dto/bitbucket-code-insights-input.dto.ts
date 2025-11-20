@@ -37,7 +37,7 @@ import { ReportStatus } from "./report-status.enum";
  */
 export class BitbucketCodeInsightsInputDto extends SchemaDto {
   /** URL del reporte completo (externa) */
-  @StringField({ description: "Report URL" })
+  @StringField({ description: "HTML Report URL created by the tool 'mcp.tool.issue.report'" })
   reportURL: string;
 
   /** ID del workspace de Bitbucket */

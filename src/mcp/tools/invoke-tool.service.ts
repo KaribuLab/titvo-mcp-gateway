@@ -235,9 +235,9 @@ export class InvokeToolService {
     openWorldHint: false,
     resultMapper: (result: any) => {
       const mapped: any = { ...result };
-      if ('report_url' in mapped && !('reportURL' in mapped)) {
-        mapped.reportURL = mapped.report_url;
-        delete mapped.report_url;
+      if ('code_insights_url' in mapped && !('codeInsightsURL' in mapped)) {
+        mapped.codeInsightsURL = mapped.code_insights_url;
+        delete mapped.code_insights_url;
       } 
       return mapped;
     },
