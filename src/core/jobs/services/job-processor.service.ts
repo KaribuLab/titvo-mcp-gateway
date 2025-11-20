@@ -3,6 +3,7 @@ import {
   Injectable,
   OnModuleDestroy,
   OnModuleInit,
+  Logger,
 } from '@nestjs/common';
 import {
   JOB_PERSISTENCE,
@@ -42,6 +43,7 @@ import { ContextService } from '../../../shared/services/context.service';
  */
 @Injectable()
 export class JobProcessorService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(JobProcessorService.name);
   constructor(
     @Inject(QUEUE_CONSUMER) private readonly consumer: QueueConsumerPort,
     @Inject(JOB_PERSISTENCE)
@@ -99,7 +101,7 @@ export class JobProcessorService implements OnModuleInit, OnModuleDestroy {
       progress: number;
       message: string;
     };
-
+    this.logger.debug(`Processing message: ${JSON.stringify(output)}`);
     // 5. Obtener el job de la BD
     const job = await this.jobPersistence.getJob(output.job_id);
     if (!job) {
