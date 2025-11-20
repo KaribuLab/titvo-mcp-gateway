@@ -11,7 +11,7 @@
  */
 export enum ReportStatus {
   /** Análisis exitoso */
-  OPEN = 'SUCCESS',
+  COMPLETED = 'COMPLETED',
 
   /** Análisis falló o errores críticos encontrados */
   FAILED = 'FAILED',
