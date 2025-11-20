@@ -180,6 +180,14 @@ export class InvokeToolService {
     readOnlyHint: true,
     idempotentHint: true,
     openWorldHint: false,
+    resultMapper: (result: any) => {
+      const mapped: any = { ...result };
+      if ('report_url' in mapped && !('reportURL' in mapped)) {
+        mapped.reportURL = mapped.report_url;
+        delete mapped.report_url;
+      }
+      return mapped;
+    },
   })
   async pollIssueReport(
     input: WaitJobInputDto,
@@ -225,6 +233,14 @@ export class InvokeToolService {
     readOnlyHint: true,
     idempotentHint: true,
     openWorldHint: false,
+    resultMapper: (result: any) => {
+      const mapped: any = { ...result };
+      if ('report_url' in mapped && !('reportURL' in mapped)) {
+        mapped.reportURL = mapped.report_url;
+        delete mapped.report_url;
+      } 
+      return mapped;
+    },
   })
   async pollBitbucketCodeInsights(
     input: WaitJobInputDto,
