@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Queue, QueueOptions } from 'bullmq';
 import { PublishEventPort } from 'src/packages/cloud-contracts/ports/publish-event.port';
 import { InvokeInputFactory } from '../../../shared/helpers/invoke-input.factory';
-import { MessageConverterHelper } from '../../../shared/helpers/message-converter.helper';
+import { CaseConversionHelper } from '../../../shared/helpers/case-conversion.helper';
 import { InvokeOutputDto } from '../../../core/invocations/dto/invoke-output.dto';
 import { LocalOptions } from '../types/local-options.interface';
 
@@ -115,7 +115,7 @@ export class LocalPublishEventAdapter implements PublishEventPort {
       console.log('input', input);
       const job = await this.queue.add(
         topic, // Nombre del job (eventType)
-        MessageConverterHelper.convertToMessage(input), // Data del job (payload del evento)
+        CaseConversionHelper.convertToSnakeCase(input), // Data del job (payload del evento)
         {
           // Opciones del job
           attempts: 3, // Reintentar 3 veces

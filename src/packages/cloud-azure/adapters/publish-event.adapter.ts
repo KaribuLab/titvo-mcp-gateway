@@ -6,7 +6,7 @@ import {
 import { Injectable, Logger } from '@nestjs/common';
 import { PublishEventPort } from 'src/packages/cloud-contracts/ports/publish-event.port';
 import { InvokeInputFactory } from '../../../shared/helpers/invoke-input.factory';
-import { MessageConverterHelper } from '../../../shared/helpers/message-converter.helper';
+import { CaseConversionHelper } from '../../../shared/helpers/case-conversion.helper';
 import { InvokeOutputDto } from '../../../core/invocations/dto/invoke-output.dto';
 import { AzureOptions } from '../types/azure-options.interface';
 
@@ -92,7 +92,7 @@ export class AzurePublishEventAdapter implements PublishEventPort {
       // Paso 1: Serializar el payload a JSON
       const input = InvokeInputFactory.create(topic, payload);
       const jsonPayload = JSON.stringify(
-        MessageConverterHelper.convertToMessage(input),
+        CaseConversionHelper.convertToSnakeCase(input),
       );
 
       // Paso 2: Crear mensaje de Service Bus

@@ -6,7 +6,7 @@ import {
 import { Injectable, Logger } from '@nestjs/common';
 import { PublishEventPort } from '../../cloud-contracts/ports/publish-event.port';
 import { InvokeInputFactory } from '../../../shared/helpers/invoke-input.factory';
-import { MessageConverterHelper } from '../../../shared/helpers/message-converter.helper';
+import { CaseConversionHelper } from '../../../shared/helpers/case-conversion.helper';
 import { InvokeOutputDto } from '../../../core/invocations/dto/invoke-output.dto';
 import { AwsOptions } from '../types/aws-options.interface';
 import { Console } from 'console';
@@ -82,7 +82,7 @@ export class AwsPublishEventAdapter implements PublishEventPort {
       const entry: PutEventsRequestEntry = {
         Source: topic, // Identificador de la aplicación que envía el evento
         DetailType: "input", // Tipo de evento (ej: 'user.created', 'order.placed')
-        Detail: JSON.stringify(MessageConverterHelper.convertToMessage(input)), // Payload serializado a JSON
+        Detail: JSON.stringify(CaseConversionHelper.convertToSnakeCase(input)), // Payload serializado a JSON
         EventBusName: this.eventBusName, // EventBus de destino
       };
       console.log('entry', entry);
