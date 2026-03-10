@@ -12,9 +12,9 @@ locals {
       name = "Production"
     }
   }
-  service_name   = "titvo-mcp-gateway"
+  service_name   = "tvo-mcp-gateway"
   parameter_path = "/tvo/security-scan"
-  service_bucket = "titvo-mcp-tfstate-gateway"
+  service_bucket = "tvo-mcp-tfstate-gateway"
   tags_file_path = "${get_terragrunt_dir()}/common_tags.json"
   log_retention  = 7
   common_tags = fileexists(local.tags_file_path) ? jsondecode(file(local.tags_file_path)) : {
