@@ -20,12 +20,12 @@ dependency "parameter" {
       "/tvo/security-scan/prod/infra/eventbridge/eventbus_name"            = "tvo-event-bus"
       "/tvo/security-scan/prod/infra/vpc/subnet/private/subnets_id"        = "[\"subnet-123abc\"]"
       "/tvo/security-scan/prod/infra/vpc/vpc_id"                           = "vpc-123abc"
-      "/tvo/security-scan/prod/infra/vpc/security-group/ecs/security_group_id" = "sg-ecs-123abc"
-      "/tvo/security-scan/prod/infra/cloudmap/namespace_id"                = "ns-123abc"
+      "/tvo/security-scan/prod/infra/vpc/security-group/security_group_id" = "sg-ecs-123abc"
+      "/tvo/security-scan/prod/infra/cloudmap/cloudmap_id"                 = "ns-123abc"
       "/tvo/security-scan/prod/infra/sqs/mcp/gateway/output/queue_arn"     = "arn:aws:sqs:us-east-2:123456789012:tvo-mcp-gateway-output"
       "/tvo/security-scan/prod/infra/sqs/mcp/gateway/output/queue_url"     = "https://sqs.us-east-2.amazonaws.com/123456789012/tvo-mcp-gateway-output"
-      "/tvo/security-scan/prod/infra/dynamodb/jobs/dynamodb_table_arn"     = "arn:aws:dynamodb:us-east-2:123456789012:table/tvo-mcp-jobs"
-      "/tvo/security-scan/prod/infra/dynamodb/jobs/dynamodb_table_name"    = "tvo-mcp-jobs"
+      "/tvo/security-scan/prod/infra/dynamo/jobs-table-arn"                = "arn:aws:dynamodb:us-east-2:123456789012:table/tvo-mcp-jobs"
+      "/tvo/security-scan/prod/infra/dynamo/jobs-table-name"               = "tvo-mcp-jobs"
       "/tvo/security-scan/prod/infra/s3/git-commit-files/bucket_arn"       = "arn:aws:s3:::tvo-mcp-git-commit-files"
       "/tvo/security-scan/prod/infra/s3/git-commit-files/bucket_name"      = "tvo-mcp-git-commit-files"
     }
@@ -54,7 +54,7 @@ inputs = {
   desired_count         = 1
   subnet_ids            = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnet/private/subnets_id"])
   vpc_id                = dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/vpc_id"]
-  security_group_ids    = [dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/ecs/security_group_id"]]
+  security_group_ids    = [dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/security_group_id"]]
   assign_public_ip      = false
   
   environment_variables = [
@@ -84,7 +84,7 @@ inputs = {
     },
     {
       name  = "AWS_DYNAMODB_TABLE_NAME"
-      value = dependency.parameter.outputs.parameters["${local.base_path}/infra/dynamodb/jobs/dynamodb_table_name"]
+      value = dependency.parameter.outputs.parameters["${local.base_path}/infra/dynamo/jobs-table-name"]
     },
     {
       name  = "AWS_S3_BUCKET_NAME"
@@ -94,7 +94,7 @@ inputs = {
   
   # Service Discovery con CloudMap para comunicación interna
   service_discovery = {
-    namespace_id = dependency.parameter.outputs.parameters["${local.base_path}/infra/cloudmap/namespace_id"]
+    namespace_id = dependency.parameter.outputs.parameters["${local.base_path}/infra/cloudmap/cloudmap_id"]
     dns = {
       name = "gateway"
       type = "A"
@@ -161,7 +161,7 @@ inputs = {
           "dynamodb:DeleteItem",
         ]
         Resource = [
-          dependency.parameter.outputs.parameters["${local.base_path}/infra/dynamodb/jobs/dynamodb_table_arn"]
+          dependency.parameter.outputs.parameters["${local.base_path}/infra/dynamo/jobs-table-arn"]
         ]
       },
       {
