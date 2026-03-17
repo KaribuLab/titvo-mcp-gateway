@@ -18,7 +18,7 @@ dependency "parameter" {
       "/tvo/security-scan/prod/infra/ecs/cluster_name"                     = "tvo-mcp-cluster-prod"
       "/tvo/security-scan/prod/infra/eventbridge/eventbus_arn"             = "arn:aws:events:us-east-2:123456789012:event-bus/tvo-event-bus"
       "/tvo/security-scan/prod/infra/eventbridge/eventbus_name"            = "tvo-event-bus"
-      "/tvo/security-scan/prod/infra/vpc/subnet/private/subnets_id"        = "[\"subnet-123abc\"]"
+      "/tvo/security-scan/prod/infra/vpc/subnets/private"        = "[\"subnet-123abc\"]"
       "/tvo/security-scan/prod/infra/vpc/vpc_id"                           = "vpc-123abc"
       "/tvo/security-scan/prod/infra/vpc/security-group/security_group_id" = "sg-ecs-123abc"
       "/tvo/security-scan/prod/infra/cloudmap/cloudmap_id"                 = "ns-123abc"
@@ -52,7 +52,7 @@ inputs = {
   task_cpu              = 512
   task_memory           = 1024
   desired_count         = 1
-  subnet_ids            = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnet/private/subnets_id"])
+  subnet_ids            = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnets/private"])
   vpc_id                = dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/vpc_id"]
   security_group_ids    = [dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/security_group_id"]]
   assign_public_ip      = false
