@@ -4,6 +4,8 @@ COPY . /app
 
 WORKDIR /app
 
+RUN ls -la
+
 RUN npm ci && \
     npm run build
 
