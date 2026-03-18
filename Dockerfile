@@ -4,9 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN ls -la
-
-RUN npm ci && \
+RUN npm install && \
     npm run build
 
 FROM node:24-alpine3.21
