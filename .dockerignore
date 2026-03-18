@@ -111,3 +111,7 @@ README.md
 test/
 *.spec.ts
 *.test.ts
+
+aws
+*.hcl
+yarn.lock
