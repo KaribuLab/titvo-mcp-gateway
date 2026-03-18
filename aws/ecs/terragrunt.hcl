@@ -18,7 +18,7 @@ dependency "parameter" {
       "/tvo/security-scan/prod/infra/ecs/cluster_name"                     = "tvo-mcp-cluster-prod"
       "/tvo/security-scan/prod/infra/eventbridge/eventbus_arn"             = "arn:aws:events:us-east-2:123456789012:event-bus/tvo-event-bus"
       "/tvo/security-scan/prod/infra/eventbridge/eventbus_name"            = "tvo-event-bus"
-      "/tvo/security-scan/prod/infra/vpc/subnets/private"        = "[\"subnet-123abc\"]"
+      "/tvo/security-scan/prod/infra/vpc/subnets/private"                  = "[\"subnet-123abc\"]"
       "/tvo/security-scan/prod/infra/vpc/vpc_id"                           = "vpc-123abc"
       "/tvo/security-scan/prod/infra/vpc/security-group/security_group_id" = "sg-ecs-123abc"
       "/tvo/security-scan/prod/infra/cloudmap/cloudmap_id"                 = "ns-123abc"
@@ -44,19 +44,19 @@ include {
 }
 
 inputs = {
-  cluster_name          = dependency.parameter.outputs.parameters["${local.base_path}/infra/ecs/cluster_name"]
-  service_name          = local.service_name
-  docker_image          = dependency.ecr.outputs.ecr_repository_url
-  image_tag             = local.image_tag
-  container_port        = 3000
-  task_cpu              = 512
-  task_memory           = 1024
-  desired_count         = 1
-  subnet_ids            = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnets/private"])
-  vpc_id                = dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/vpc_id"]
-  security_group_ids    = [dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/security_group_id"]]
-  assign_public_ip      = false
-  
+  cluster_name       = dependency.parameter.outputs.parameters["${local.base_path}/infra/ecs/cluster_name"]
+  service_name       = local.service_name
+  docker_image       = dependency.ecr.outputs.ecr_repository_url
+  image_tag          = local.image_tag
+  container_port     = 3000
+  task_cpu           = 512
+  task_memory        = 1024
+  desired_count      = 1
+  subnet_ids         = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnets/private"])
+  vpc_id             = dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/vpc_id"]
+  security_group_ids = [dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/security_group_id"]]
+  assign_public_ip   = false
+
   environment_variables = [
     {
       name  = "NODE_ENV"
@@ -91,7 +91,7 @@ inputs = {
       value = dependency.parameter.outputs.parameters["${local.base_path}/infra/s3/git-commit-files/bucket_name"]
     },
   ]
-  
+
   # Service Discovery con CloudMap para comunicación interna
   service_discovery = {
     namespace_id = dependency.parameter.outputs.parameters["${local.base_path}/infra/cloudmap/cloudmap_id"]
@@ -101,7 +101,7 @@ inputs = {
       ttl  = 60
     }
   }
-  
+
   # Health check interno
   health_check = {
     command     = ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
@@ -110,7 +110,7 @@ inputs = {
     retries     = 3
     startPeriod = 60
   }
-  
+
   # Autoscaling
   autoscaling_config = {
     min_capacity = 1
@@ -126,7 +126,7 @@ inputs = {
       scale_out_cooldown = 300
     }
   }
-  
+
   # IAM Policy para el task
   task_policy_json = jsonencode({
     Version = "2012-10-17"
@@ -177,11 +177,11 @@ inputs = {
       },
     ]
   })
-  
+
   cloudwatch_log_group_name = "/aws/ecs/${local.service_name}"
   log_retention_days        = local.serverless.locals.log_retention
   force_new_deployment      = true
-  
+
   tags = merge(local.common_tags, {
     Name        = local.service_name
     Environment = local.serverless.locals.stage
