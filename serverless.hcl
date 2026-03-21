@@ -17,7 +17,8 @@ locals {
   service_bucket = "tvo-mcp-tfstate-gateway"
   tags_file_path = "${get_terragrunt_dir()}/common_tags.json"
   log_retention  = 7
-  common_tags = fileexists(local.tags_file_path) ? jsondecode(file(local.tags_file_path)) : {
-    Project = "Titvo MCP Gateway"
-  }
+  common_tags = merge(
+    { Project = "Titvo" },
+    fileexists(local.tags_file_path) ? jsondecode(file(local.tags_file_path)) : {}
+  )
 }
