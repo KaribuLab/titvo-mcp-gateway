@@ -9,6 +9,7 @@ import { JobProcessorService } from './core/jobs/services/job-processor.service'
 import { JobResource } from './mcp/resources/job.resource';
 import { InvokeToolService } from './mcp/tools/invoke-tool.service';
 import { FilesService } from './mcp/tools/files.service';
+import { HealthcheckModule } from './packages/healthcheck/healthcheck.module';
 
 /**
  * AppModule - Módulo principal de la aplicación MCP Gateway
@@ -55,6 +56,7 @@ import { FilesService } from './mcp/tools/files.service';
         statelessMode: false, // Enables session management
       },
     }),
+    HealthcheckModule
   ],
   providers: [
     ContextService,
