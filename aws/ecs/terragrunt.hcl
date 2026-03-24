@@ -28,6 +28,7 @@ dependency "parameter" {
       "/tvo/security-scan/prod/infra/dynamo/jobs-table-name"               = "tvo-mcp-jobs"
       "/tvo/security-scan/prod/infra/s3/git-commit-files/bucket_arn"       = "arn:aws:s3:::tvo-mcp-git-commit-files"
       "/tvo/security-scan/prod/infra/s3/git-commit-files/bucket_name"      = "tvo-mcp-git-commit-files"
+      "/tvo/security-scan/prod/infra/batch/agent/security_group_id"        = "sg-123abc"
     }
   }
 }
@@ -44,18 +45,21 @@ include {
 }
 
 inputs = {
-  cluster_name       = dependency.parameter.outputs.parameters["${local.base_path}/infra/ecs/cluster_name"]
-  service_name       = local.service_name
-  docker_image       = dependency.ecr.outputs.ecr_repository_url
-  image_tag          = local.image_tag
-  container_port     = 3000
-  task_cpu           = 512
-  task_memory        = 1024
-  desired_count      = 1
-  subnet_ids         = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnets/private"])
-  vpc_id             = dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/vpc_id"]
-  security_group_ids = [dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/security_group_id"]]
-  assign_public_ip   = false
+  cluster_name   = dependency.parameter.outputs.parameters["${local.base_path}/infra/ecs/cluster_name"]
+  service_name   = local.service_name
+  docker_image   = dependency.ecr.outputs.ecr_repository_url
+  image_tag      = local.image_tag
+  container_port = 3000
+  task_cpu       = 512
+  task_memory    = 1024
+  desired_count  = 1
+  subnet_ids     = jsondecode(dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/subnets/private"])
+  vpc_id         = dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/vpc_id"]
+  security_group_ids = [
+    dependency.parameter.outputs.parameters["${local.base_path}/infra/vpc/security-group/security_group_id"],
+    dependency.parameter.outputs.parameters["${local.base_path}/infra/batch/agent/security_group_id"],
+  ]
+  assign_public_ip = false
 
   environment_variables = [
     {

@@ -130,11 +130,37 @@ resource "aws_service_discovery_service" "service" {
     routing_policy = "MULTIVALUE"
   }
 
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-
   tags = var.tags
+}
+
+resource "aws_security_group" "service" {
+  vpc_id      = var.vpc_id
+  name        = "${var.service_name}-sg"
+  description = "SG for ${var.service_name}"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "from_allowed_sgs_3000" {
+  for_each = toset(var.security_group_ids)
+  security_group_id            = aws_security_group.service.id
+  referenced_security_group_id = each.value
+  ip_protocol                  = "tcp"
+  from_port                    = var.container_port
+  to_port                      = var.container_port
+  description                  = "Allow ${var.container_port} from ${each.value}"
+}
+
+resource "aws_vpc_security_group_egress_rule" "all_outbound_ipv4" {
+  security_group_id = aws_security_group.service.id
+  ip_protocol       = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+  description       = "Allow all outbound IPv4"
+}
+
+resource "aws_vpc_security_group_egress_rule" "all_outbound_ipv6" {
+  security_group_id = aws_security_group.service.id
+  ip_protocol       = "-1"
+  cidr_ipv6         = "::/0"
+  description       = "Allow all outbound IPv6"
 }
 
 # ECS Service
@@ -147,7 +173,7 @@ resource "aws_ecs_service" "service" {
 
   network_configuration {
     subnets          = var.subnet_ids
-    security_groups  = var.security_group_ids
+    security_groups  = [aws_security_group.service.id]
     assign_public_ip = var.assign_public_ip
   }
 

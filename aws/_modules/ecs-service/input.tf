@@ -49,7 +49,7 @@ variable "subnet_ids" {
 }
 
 variable "security_group_ids" {
-  description = "List of security group IDs"
+  description = "List of ingress security group IDs"
   type        = list(string)
 }
 
