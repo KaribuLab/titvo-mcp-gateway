@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Tool, type Context } from "@rekog/mcp-nest";
 import { GetDataFromFileInputDto } from "src/core/invocations/dto/get-data-from-file-input.dto";
 import { GetDataFromFileOutputDto } from "src/core/invocations/dto/get-data-from-file-output.dto";
@@ -47,6 +47,7 @@ import { GetDataFromFilePort } from "src/packages/cloud-contracts/ports/get-data
  */
 @Injectable()
 export class FilesService {
+  private readonly logger = new Logger(FilesService.name);
   constructor(
     @Inject(GET_DATA_FROM_FILE) private readonly getDataFromFilePort: GetDataFromFilePort,
   ) {}
@@ -71,6 +72,7 @@ export class FilesService {
   })
   async getData(input: GetDataFromFileInputDto, context: Context) {
     const data = await this.getDataFromFilePort.getData(input.path);
+    this.logger.log(`Data: ${data}`);
     return data;
   }
 }
