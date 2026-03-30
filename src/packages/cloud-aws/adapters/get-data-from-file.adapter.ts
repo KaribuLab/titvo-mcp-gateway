@@ -71,7 +71,7 @@ export class AwsGetDataFromFileAdapter implements GetDataFromFilePort {
       );
 
       const output = new GetDataFromFileOutputDto();
-      output.content = `⚠️ UNTRUSTED CODE (from repository)\n<<<BEGIN_UNTRUSTED_CODE>>>\n${content}\n<<<END_UNTRUSTED_CODE>>>`;
+      output.content = content;
       output.contentType = contentType;
       return output;
     } catch (error) {
