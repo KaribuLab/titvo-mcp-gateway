@@ -12,6 +12,7 @@ import { AppModule } from './app.module';
  * - PORT: Puerto del servidor (default: 3000)
  */
 async function bootstrap() {
+  process.env.NO_COLOR = 'true';
   const app = await NestFactory.create(AppModule);
   await app.listen(process.env.PORT ?? 3000);
 }
