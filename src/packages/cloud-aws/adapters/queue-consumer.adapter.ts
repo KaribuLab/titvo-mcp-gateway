@@ -189,7 +189,6 @@ export class AwsQueueConsumerAdapter implements QueueConsumerPort {
 
       // Solicitar mensajes a SQS
       const response = await this.sqsClient.send(command);
-      console.log('response', response);
       // Procesar mensajes si hay alguno
       if (response.Messages && response.Messages.length > 0) {
         this.logger.log(`Received ${response.Messages.length} message(s)`);
