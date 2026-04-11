@@ -1,5 +1,7 @@
 FROM node:24-alpine3.21 AS builder
 
+RUN apk add --no-cache curl
+
 COPY . /app
 
 WORKDIR /app
