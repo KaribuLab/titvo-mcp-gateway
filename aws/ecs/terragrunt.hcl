@@ -108,11 +108,11 @@ inputs = {
 
   # Health check interno
   health_check = {
-    command     = ["CMD-SHELL", "out=$(node -e \"const http=require('http');const req=http.get('http://127.0.0.1:3000/health',res=>{if(res.statusCode===200)process.exit(0);console.error('status='+res.statusCode);process.exit(1)});req.on('error',e=>{console.error('error='+e.message);process.exit(1)});req.setTimeout(4000,()=>{console.error('timeout');req.destroy();process.exit(1)});\" 2>&1); ec=$?; if [ $ec -ne 0 ]; then msg=\"$(date -Iseconds) [HEALTHCHECK][FAIL] $out\"; printf '%s\\n' \"$msg\" >/proc/1/fd/2 2>/dev/null || printf '%s\\n' \"$msg\"; fi; exit $ec"]
+    command     = ["CMD-SHELL", "node /home/node/healthcheck.js"]
     interval    = 30
     timeout     = 5
     retries     = 3
-    startPeriod = 120
+    startPeriod = 240
   }
 
   # Autoscaling
