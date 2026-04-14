@@ -38,26 +38,46 @@ import { ReportStatus } from "./report-status.enum";
  */
 export class GithubIssueInputDto extends SchemaDto {
   /** Propietario del repositorio (organización o usuario) */
-  @StringField({ description: "Repo Owner" })
+  @StringField({
+    description:
+      "GitHub repository owner: the organization or user from the URL github.com/OWNER/REPO (same value as in the scan context).",
+  })
   repoOwner: string;
 
   /** Nombre del repositorio */
-  @StringField({ description: "Repo Name" })
+  @StringField({
+    description:
+      "GitHub repository name: the repo segment from github.com/owner/REPO (without .git).",
+  })
   repoName: string;
 
   /** Usuario de GitHub a quien se asignará el issue */
-  @StringField({ description: "Asignee" })
+  @StringField({
+    description:
+      "GitHub username to assign the issue to (must exist on GitHub; often provided in scan parameters).",
+  })
   asignee: string;
 
   /** Hash del commit relacionado con el issue */
-  @StringField({ description: "Commit Hash" })
+  @StringField({
+    description:
+      "Full commit SHA for the issue title and body (same commit being scanned).",
+  })
   commitHash: string;
 
   /** Estado del análisis (SUCCESS, FAILED, WARNING) */
-  @EnumField({ description: "Status of the report", enum: ReportStatus })
+  @EnumField({
+    description:
+      "Overall scan outcome for the issue template: COMPLETED, WARNING, or FAILED (ReportStatus enum—same values as issue report).",
+    enum: ReportStatus,
+  })
   status: ReportStatus;
 
   /** Lista de anotaciones que generarán el contenido del issue */
-  @ArrayField({ description: "Annotations", itemType: AnnotationDto })
+  @ArrayField({
+    description:
+      "Vulnerabilities to include in the issue body; each item follows AnnotationDto (title, description, severity, path, line, summary, code, recommendation).",
+    itemType: AnnotationDto,
+  })
   annotations: AnnotationDto[];
 }

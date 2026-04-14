@@ -37,26 +37,46 @@ import { ReportStatus } from "./report-status.enum";
  */
 export class BitbucketCodeInsightsInputDto extends SchemaDto {
   /** URL del reporte completo (externa) */
-  @StringField({ description: "HTML Report URL created by the tool 'mcp.tool.issue.report'" })
+  @StringField({
+    description:
+      "reportURL returned by mcp.tool.issue.report after polling to SUCCESS (Bitbucket insights link back to this HTML report).",
+  })
   reportURL: string;
 
   /** ID del workspace de Bitbucket */
-  @StringField({ description: "Workspace ID" })
+  @StringField({
+    description:
+      "Bitbucket workspace ID from the repo URL bitbucket.org/WORKSPACE/repo (often the team or user slug).",
+  })
   workspaceId: string;
 
   /** Hash del commit donde se publicará el reporte */
-  @StringField({ description: "Commit Hash" })
+  @StringField({
+    description:
+      "Commit SHA where annotations are published (same commit being scanned).",
+  })
   commitHash: string;
 
   /** Slug del repositorio (nombre corto) */
-  @StringField({ description: "Repo Slug" })
+  @StringField({
+    description:
+      "Repository slug from bitbucket.org/workspace/REPO_SLUG (short repo name, not display name).",
+  })
   repoSlug: string;
 
   /** Estado general del reporte (SUCCESS, FAILED, WARNING) */
-  @EnumField({ description: "Status of the report", enum: ReportStatus })
+  @EnumField({
+    description:
+      "Scan outcome label for the report: COMPLETED, WARNING, or FAILED (ReportStatus enum).",
+    enum: ReportStatus,
+  })
   status: ReportStatus;
 
   /** Lista de anotaciones de código a publicar */
-  @ArrayField({ description: "Annotations", itemType: AnnotationDto })
+  @ArrayField({
+    description:
+      "Inline findings for Code Insights; each item follows AnnotationDto (path and line must match files in the commit).",
+    itemType: AnnotationDto,
+  })
   annotations: AnnotationDto[];
 }

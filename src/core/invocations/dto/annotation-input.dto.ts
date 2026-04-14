@@ -31,34 +31,58 @@ import {
  */
 export class AnnotationDto extends SchemaDto {
   /** Título breve de la anotación */
-  @StringField({ description: 'Title of the annotation' })
+  @StringField({
+    description:
+      "Short finding title in neutral Spanish (one line, suitable for report and issue lists).",
+  })
   title: string;
 
   /** Descripción detallada del problema */
-  @StringField({ description: 'Description of the annotation' })
+  @StringField({
+    description:
+      "Detailed explanation of the vulnerability or finding in neutral Spanish (what is wrong and why it matters).",
+  })
   description: string;
 
   /** Nivel de severidad (error, warning, info, etc.) */
-  @StringField({ description: 'Severity of the annotation' })
+  @StringField({
+    description:
+      "Severity label: use one of CRITICAL, HIGH, MEDIUM, LOW, or NONE (uppercase recommended for consistency with reports).",
+  })
   severity: string;
 
   /** Ruta del archivo donde se encontró el issue */
-  @StringField({ description: 'Path of the annotation' })
+  @StringField({
+    description:
+      "Repository-relative file path where the finding applies (e.g. src/app/service.ts).",
+  })
   path: string;
 
   /** Número de línea donde se encuentra el issue */
-  @NumberField({ description: 'Line of the annotation' })
+  @NumberField({
+    description:
+      "1-based line number in the file for the finding (must match the analyzed source line).",
+  })
   line: number;
 
   /** Resumen ejecutivo del problema */
-  @StringField({ description: 'Summary of the annotation' })
+  @StringField({
+    description:
+      "One or two sentences in neutral Spanish summarizing the issue for dashboards.",
+  })
   summary: string;
 
   /** Código del issue (ej: 'ESLint: no-unused-vars') */
-  @StringField({ description: 'Code of the annotation' })
+  @StringField({
+    description:
+      "Small code snippet or identifier illustrating the issue (literal code from the file when possible).",
+  })
   code: string;
 
   /** Recomendación para resolver el issue */
-  @StringField({ description: 'Recommendation of the annotation' })
+  @StringField({
+    description:
+      "Actionable remediation in neutral Spanish (how to fix or mitigate the finding).",
+  })
   recommendation: string;
 }

@@ -34,12 +34,17 @@ import { ReportStatus } from './report-status.enum';
  */
 export class IssueReportInputDto extends SchemaDto {
   /** Estado general del reporte (SUCCESS, FAILED, WARNING) */
-  @EnumField({ description: 'Status of the report', enum: ReportStatus })
+  @EnumField({
+    description:
+      "Overall scan outcome for the HTML report: COMPLETED, WARNING, or FAILED (ReportStatus enum; align with severity of findings).",
+    enum: ReportStatus,
+  })
   reportStatus: ReportStatus;
 
   /** Lista de anotaciones a incluir en el reporte (mínimo 1) */
   @ArrayField({
-    description: 'Annotations of the report',
+    description:
+      "At least one finding; each item follows AnnotationDto. Used to render the report—neutral Spanish text is recommended.",
     itemType: AnnotationDto,
     minItems: 1,
   })
