@@ -55,6 +55,8 @@ export function InvokeAsyncTool(options: InvokeAsyncToolOptions) {
     propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
+    const originalMethod = descriptor.value;
+
     // ====================================================
     // PASO 1: Reemplazar el método con wrapper que ejecuta lógica común
     // ====================================================
@@ -83,6 +85,10 @@ export function InvokeAsyncTool(options: InvokeAsyncToolOptions) {
       }
 
       try {
+        if (typeof originalMethod === 'function') {
+          await originalMethod.call(this, input, context);
+        }
+
         // ====================================================
         // LÓGICA COMÚN: Publicar evento y guardar job
         // ====================================================
@@ -159,4 +165,3 @@ export function InvokeAsyncTool(options: InvokeAsyncToolOptions) {
     return descriptor;
   };
 }
-

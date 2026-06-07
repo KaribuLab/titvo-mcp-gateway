@@ -38,4 +38,21 @@ export class GetCommitInputDto extends SchemaDto {
       "Full commit SHA to fetch files for (same value as the commit hash in the scan task).",
   })
   commitId: string;
+
+  /** Modo de escaneo: commit por defecto, full para snapshot completo de rama/ref */
+  @StringField({
+    description:
+      'Scan mode for file retrieval. Use "commit" for changed files only or "full" for all files at the selected branch/ref. Defaults to "commit" when omitted.',
+    required: false,
+    pattern: /^(commit|full)$/,
+  })
+  scanMode?: string;
+
+  /** Rama/ref a usar para full scan */
+  @StringField({
+    description:
+      'Branch or ref to retrieve when scanMode is "full". Required for full scans.',
+    required: false,
+  })
+  branch?: string;
 }

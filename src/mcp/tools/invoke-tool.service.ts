@@ -13,6 +13,38 @@ import { GetCommitInputDto } from "../../core/invocations/dto/get-commit-input.d
 import { WaitJobInputDto } from "../../core/invocations/dto/wait-job-input.dto";
 import { GitCommitFilesOutputDto } from "../../core/invocations/dto/git-commit-files-output.dto";
 
+export function mapGitCommitFilesResult(result: any) {
+  // Mapear campos snake_case a camelCase
+  const mapped: any = { ...result };
+
+  if ('commit_id' in mapped && !('commitId' in mapped)) {
+    mapped.commitId = mapped.commit_id;
+    delete mapped.commit_id;
+  }
+
+  if ('files_paths' in mapped && !('filesPaths' in mapped)) {
+    mapped.filesPaths = mapped.files_paths;
+    delete mapped.files_paths;
+  }
+
+  if ('scan_mode' in mapped && !('scanMode' in mapped)) {
+    mapped.scanMode = mapped.scan_mode;
+    delete mapped.scan_mode;
+  }
+
+  if ('scan_ref' in mapped && !('scanRef' in mapped)) {
+    mapped.scanRef = mapped.scan_ref;
+    delete mapped.scan_ref;
+  }
+
+  if ('storage_prefix' in mapped && !('storagePrefix' in mapped)) {
+    mapped.storagePrefix = mapped.storage_prefix;
+    delete mapped.storage_prefix;
+  }
+
+  return mapped;
+}
+
 /**
  * InvokeToolService - Servicio que expone tools MCP para invocar operaciones asíncronas
  *
@@ -78,7 +110,7 @@ export class InvokeToolService {
   @InvokeAsyncTool({
     name: "mcp.tool.git.commit-files",
     description:
-      "Fetches commit files for analysis (GitHub, Bitbucket, or any Git URL). Use first to obtain file paths. Returns jobId and pollToolName; you MUST poll until SUCCESS to read filesPaths.",
+      "Fetches files for analysis (GitHub, Bitbucket, or any Git URL). Defaults to scanMode=commit to retrieve changed files for commitId. Use scanMode=full with branch to retrieve all files at the selected branch/ref. Returns jobId and pollToolName; you MUST poll until SUCCESS to read filesPaths.",
     dtoClass: GetCommitInputDto,
     pollToolName: "mcp.tool.git.commit-files.poll",
     title: "Get commit files for security analysis",
@@ -87,7 +119,11 @@ export class InvokeToolService {
     idempotentHint: true,
     openWorldHint: false,
   })
-  async toolGitCommitFiles(input: GetCommitInputDto, context: Context) { }
+  async toolGitCommitFiles(input: GetCommitInputDto, context: Context) {
+    if (input.scanMode === 'full' && !input.branch) {
+      throw new Error('branch is required when scanMode is full');
+    }
+  }
 
   /**
    * Tool: Hacer polling del resultado de git commit-files
@@ -106,22 +142,7 @@ export class InvokeToolService {
     dtoClass: WaitJobInputDto,
     outputSchemaClass: GitCommitFilesOutputDto,
     resultMapper: (result: any) => {
-      // Mapear campos snake_case a camelCase
-      const mapped: any = { ...result };
-
-      // Mapear commit_id -> commitId
-      if ('commit_id' in mapped && !('commitId' in mapped)) {
-        mapped.commitId = mapped.commit_id;
-        delete mapped.commit_id;
-      }
-
-      // Mapear files_paths -> filesPaths
-      if ('files_paths' in mapped && !('filesPaths' in mapped)) {
-        mapped.filesPaths = mapped.files_paths;
-        delete mapped.files_paths;
-      }
-
-      return mapped;
+      return mapGitCommitFilesResult(result);
     },
     title: 'Get git commit files result',
     destructiveHint: false,
