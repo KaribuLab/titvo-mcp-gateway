@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { Logger } from '@nestjs/common';
 import type { Context } from '@rekog/mcp-nest';
 import { Tool } from '@rekog/mcp-nest';
 import { JobPersistencePort } from '../../packages/cloud-contracts/ports/job-persistence.port';
@@ -6,6 +7,8 @@ import { PublishEventPort } from '../../packages/cloud-contracts/ports/publish-e
 import { ContextService } from '../../shared/services/context.service';
 import { InvokeAsyncOutputDto } from '../../core/invocations/dto/invoke-async-output.dto';
 import { SchemaDto } from '../../shared/dto/schema.dto';
+
+const logger = new Logger('InvokeAsyncTool');
 
 /**
  * Opciones para el decorador @InvokeAsyncTool
@@ -114,7 +117,7 @@ export function InvokeAsyncTool(options: InvokeAsyncToolOptions) {
         contextService.saveContext(invokeOutput.jobId, context);
 
         // 5. Log informativo
-        console.log(
+        logger.log(
           `[${options.name}] Event published with ID: ${invokeOutput.jobId}`,
         );
 
@@ -127,9 +130,8 @@ export function InvokeAsyncTool(options: InvokeAsyncToolOptions) {
       } catch (error) {
         // Manejo de errores
         const err = error as Error;
-        console.error(
-          `[${options.name}] Error processing tool:`,
-          err.message,
+        logger.error(
+          `[${options.name}] Error processing tool: ${err.message}`,
           err.stack,
         );
         throw error;

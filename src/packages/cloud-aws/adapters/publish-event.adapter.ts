@@ -9,7 +9,6 @@ import { InvokeInputFactory } from '../../../shared/helpers/invoke-input.factory
 import { CaseConversionHelper } from '../../../shared/helpers/case-conversion.helper';
 import { InvokeOutputDto } from '../../../core/invocations/dto/invoke-output.dto';
 import { AwsOptions } from '../types/aws-options.interface';
-import { Console } from 'console';
 
 /**
  * AwsPublishEventAdapter - Implementación de PublishEventPort para AWS EventBridge
@@ -85,7 +84,7 @@ export class AwsPublishEventAdapter implements PublishEventPort {
         Detail: JSON.stringify(CaseConversionHelper.convertToSnakeCase(input)), // Payload serializado a JSON
         EventBusName: this.eventBusName, // EventBus de destino
       };
-      console.log('entry', entry);
+      this.logger.debug(`EventBridge entry: ${JSON.stringify(entry)}`);
 
       // Paso 2: Agregar atributos como recursos si se proporcionan
       // Los atributos se mapean a Resources para filtrado en EventBridge

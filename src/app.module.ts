@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { LoggerModule } from 'nestjs-pino';
+import * as pino from 'pino';
 import { McpModule } from '@rekog/mcp-nest';
 import { randomUUID } from 'crypto';
 import { CloudProvider } from './packages/cloud-contracts/enums/cloud-provider.enum';
@@ -31,6 +33,18 @@ import { HealthcheckModule } from './packages/healthcheck/healthcheck.module';
  */
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.LOG_LEVEL ?? 'info',
+        autoLogging: false,
+        timestamp: pino.stdTimeFunctions.isoTime,
+        formatters: {
+          level(label: string): { level: string } {
+            return { level: label };
+          },
+        },
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       validate: (config: Record<string, unknown>) => {

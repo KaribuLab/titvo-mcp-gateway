@@ -1,9 +1,12 @@
 import 'reflect-metadata';
+import { Logger } from '@nestjs/common';
 import type { Context } from '@rekog/mcp-nest';
 import { Tool } from '@rekog/mcp-nest';
 import { JobPersistencePort } from '../../packages/cloud-contracts/ports/job-persistence.port';
 import { SchemaDto } from '../../shared/dto/schema.dto';
 import { JobStatus } from '../../core/invocations/dto/job-status.enum';
+
+const logger = new Logger('PollAsyncTool');
 
 /**
  * Opciones para el decorador @PollAsyncTool
@@ -88,14 +91,14 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
         throw new Error('@PollAsyncTool: Input must have a jobId property');
       }
 
-      console.log(`[${options.name}] Checking status for job: ${jobId}`);
+      logger.log(`[${options.name}] Checking status for job: ${jobId}`);
 
       // Consultar estado del job usando JobPersistencePort (una sola vez)
       const job = await jobPersistence.getJob(jobId);
 
       if (!job) {
         const error = new Error(`Job ${jobId} not found`);
-        console.error(`[${options.name}] ${error.message}`);
+        logger.error(`[${options.name}] ${error.message}`);
         throw error;
       }
 
@@ -117,7 +120,7 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
 
       // Si el job terminó exitosamente, asignar resultado
       if (job.status === JobStatus.SUCCESS) {
-        console.log(
+        logger.log(
           `[${options.name}] Job ${jobId} completed successfully`,
         );
 
@@ -133,19 +136,19 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
         }
       } else if (job.status === JobStatus.REQUESTED || job.status === JobStatus.IN_PROGRESS) {
         // Job en progreso - retornar objeto con status para que el agente sepa que debe esperar
-        console.log(
+        logger.log(
           `[${options.name}] Job ${jobId} is still ${job.status.toLowerCase()}. Progress: ${job.progress}%.`,
         );
         // No asignar resultado, solo status y jobId
       } else if (job.status === JobStatus.FAILURE) {
         // Job falló - retornar objeto con status FAILURE
-        console.error(
+        logger.error(
           `[${options.name}] Job ${jobId} failed: ${job.message || 'Unknown error'}`,
         );
         // No asignar resultado, solo status y jobId
       } else {
         // Estado desconocido
-        console.error(
+        logger.error(
           `[${options.name}] Job ${jobId} has unknown status: ${job.status}`,
         );
       }

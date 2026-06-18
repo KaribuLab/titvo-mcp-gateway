@@ -110,9 +110,9 @@ export class LocalPublishEventAdapter implements PublishEventPort {
     try {
       // Paso 1: Crear el job en BullMQ
       // El nombre del job es el topic/eventType
-      console.log('payload', payload);
+      this.logger.debug(`Publishing payload: ${JSON.stringify(payload)}`);
       const input = InvokeInputFactory.create(topic, payload);
-      console.log('input', input);
+      this.logger.debug(`Publishing input: ${JSON.stringify(input)}`);
       const job = await this.queue.add(
         topic, // Nombre del job (eventType)
         CaseConversionHelper.convertToSnakeCase(input), // Data del job (payload del evento)
@@ -126,7 +126,7 @@ export class LocalPublishEventAdapter implements PublishEventPort {
           ...(attrs && Object.keys(attrs).length > 0 ? { attrs } : {}),
         },
       );
-      console.log('job', job);
+      this.logger.debug(`Job created: ${JSON.stringify({ id: job.id, name: job.name })}`);
 
       // Paso 3: Loggear éxito y retornar jobId
       this.logger.log(
