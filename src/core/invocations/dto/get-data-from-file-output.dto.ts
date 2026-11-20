@@ -1,6 +1,4 @@
-import {
-  StringField
-} from '../../../shared/dto/decorators/field.decorator';
+import { StringField } from '../../../shared/dto/decorators/field.decorator';
 import { SchemaDto } from '../../../shared/dto/schema.dto';
 
 /**
@@ -26,5 +24,4 @@ export class GetDataFromFileOutputDto extends SchemaDto {
   /** Tipo de contenido del archivo */
   @StringField({ description: 'Type of the content' })
   contentType: string;
-
 }

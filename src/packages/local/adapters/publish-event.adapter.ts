@@ -126,7 +126,9 @@ export class LocalPublishEventAdapter implements PublishEventPort {
           ...(attrs && Object.keys(attrs).length > 0 ? { attrs } : {}),
         },
       );
-      this.logger.debug(`Job created: ${JSON.stringify({ id: job.id, name: job.name })}`);
+      this.logger.debug(
+        `Job created: ${JSON.stringify({ id: job.id, name: job.name })}`,
+      );
 
       // Paso 3: Loggear éxito y retornar jobId
       this.logger.log(

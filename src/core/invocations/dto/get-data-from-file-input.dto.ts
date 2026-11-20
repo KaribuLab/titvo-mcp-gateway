@@ -1,6 +1,4 @@
-import {
-  StringField
-} from '../../../shared/dto/decorators/field.decorator';
+import { StringField } from '../../../shared/dto/decorators/field.decorator';
 import { SchemaDto } from '../../../shared/dto/schema.dto';
 
 /**
@@ -19,6 +17,9 @@ import { SchemaDto } from '../../../shared/dto/schema.dto';
 
 export class GetDataFromFileInputDto extends SchemaDto {
   /** Ruta del archivo */
-  @StringField({ description: 'Path of the file returned by the array files_paths from mcp.tool.git.commit-files tool' })
+  @StringField({
+    description:
+      'Path of the file returned by the array files_paths from mcp.tool.git.commit-files tool',
+  })
   path: string;
 }

@@ -220,7 +220,10 @@ export abstract class SchemaDto {
       itemSchema = z.number();
     } else if (options.itemType === Boolean) {
       itemSchema = z.boolean();
-    } else if (typeof options.itemType === 'function' && typeof options.itemType.schema === 'function') {
+    } else if (
+      typeof options.itemType === 'function' &&
+      typeof options.itemType.schema === 'function'
+    ) {
       // Es una clase que extiende SchemaDto
       itemSchema = options.itemType.schema();
     } else {
@@ -279,7 +282,7 @@ export abstract class SchemaDto {
    * Construye schema Zod para campo Any (sin validación estricta)
    */
   private static buildAnySchema(options: AnyFieldOptions): z.ZodType {
-    let schema = z.any().describe(options.description);
+    const schema = z.any().describe(options.description);
 
     // Si no es requerido, hacerlo opcional
     if (options.required === false) {

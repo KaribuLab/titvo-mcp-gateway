@@ -54,7 +54,9 @@ export class AwsGetDataFromFileAdapter implements GetDataFromFilePort {
    */
   async getData(path: string): Promise<GetDataFromFileOutputDto> {
     try {
-      this.logger.log(`Getting file from S3: bucket=${this.bucketName}, key=${path}`);
+      this.logger.log(
+        `Getting file from S3: bucket=${this.bucketName}, key=${path}`,
+      );
 
       const response = await this.s3Client.send(
         new GetObjectCommand({

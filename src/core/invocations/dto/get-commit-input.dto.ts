@@ -28,14 +28,14 @@ export class GetCommitInputDto extends SchemaDto {
   /** URL del repositorio Git (HTTP/HTTPS o SSH) */
   @StringField({
     description:
-      "Clone URL of the Git remote (HTTPS or SSH), e.g. https://github.com/org/repo.git or git@bitbucket.org:workspace/repo.git—same repository as the scan.",
+      'Clone URL of the Git remote (HTTPS or SSH), e.g. https://github.com/org/repo.git or git@bitbucket.org:workspace/repo.git—same repository as the scan.',
   })
   repository: string;
 
   /** SHA del commit a consultar */
   @StringField({
     description:
-      "Full commit SHA to fetch files for (same value as the commit hash in the scan task).",
+      'Full commit SHA to fetch files for (same value as the commit hash in the scan task).',
   })
   commitId: string;
 

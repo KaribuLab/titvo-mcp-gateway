@@ -120,9 +120,7 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
 
       // Si el job terminó exitosamente, asignar resultado
       if (job.status === JobStatus.SUCCESS) {
-        logger.log(
-          `[${options.name}] Job ${jobId} completed successfully`,
-        );
+        logger.log(`[${options.name}] Job ${jobId} completed successfully`);
 
         // Asignar valores desde job.result
         // Aplicar resultMapper si existe para transformar el resultado
@@ -130,11 +128,14 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
         if (job.result && options.resultMapper) {
           resultToAssign = options.resultMapper(job.result);
         }
-        
+
         if (resultToAssign) {
           Object.assign(output, resultToAssign);
         }
-      } else if (job.status === JobStatus.REQUESTED || job.status === JobStatus.IN_PROGRESS) {
+      } else if (
+        job.status === JobStatus.REQUESTED ||
+        job.status === JobStatus.IN_PROGRESS
+      ) {
         // Job en progreso - retornar objeto con status para que el agente sepa que debe esperar
         logger.log(
           `[${options.name}] Job ${jobId} is still ${job.status.toLowerCase()}. Progress: ${job.progress}%.`,
@@ -185,5 +186,3 @@ export function PollAsyncTool(options: PollAsyncToolOptions) {
     return descriptor;
   };
 }
-
-

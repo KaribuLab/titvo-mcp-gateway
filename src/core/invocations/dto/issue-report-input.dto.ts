@@ -36,7 +36,7 @@ export class IssueReportInputDto extends SchemaDto {
   /** Estado general del reporte (SUCCESS, FAILED, WARNING) */
   @EnumField({
     description:
-      "Overall scan outcome for the HTML report: COMPLETED, WARNING, or FAILED (ReportStatus enum; align with severity of findings).",
+      'Overall scan outcome for the HTML report: COMPLETED, WARNING, or FAILED (ReportStatus enum; align with severity of findings).',
     enum: ReportStatus,
   })
   reportStatus: ReportStatus;
@@ -44,7 +44,7 @@ export class IssueReportInputDto extends SchemaDto {
   /** Lista de anotaciones a incluir en el reporte (mínimo 1) */
   @ArrayField({
     description:
-      "At least one finding; each item follows AnnotationDto. Used to render the report—neutral Spanish text is recommended.",
+      'At least one finding; each item follows AnnotationDto. Used to render the report—neutral Spanish text is recommended.',
     itemType: AnnotationDto,
     minItems: 1,
   })

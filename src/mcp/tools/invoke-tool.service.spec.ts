@@ -1,4 +1,7 @@
-import { InvokeToolService, mapGitCommitFilesResult } from './invoke-tool.service';
+import {
+  InvokeToolService,
+  mapGitCommitFilesResult,
+} from './invoke-tool.service';
 import { GetCommitInputDto } from '../../core/invocations/dto/get-commit-input.dto';
 
 describe('GetCommitInputDto', () => {

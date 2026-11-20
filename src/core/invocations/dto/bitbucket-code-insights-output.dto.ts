@@ -21,7 +21,9 @@ import { JobStatus } from './job-status.enum';
  */
 export class BitbucketCodeInsightsOutputDto extends PollOutputDto {
   /** URL del reporte publicado en Bitbucket Code Insights (disponible solo cuando status === "SUCCESS") */
-  @StringField({ description: `URL of the report published in Bitbucket Code Insights. Only available when status is ${JobStatus.SUCCESS}.`, required: false })
+  @StringField({
+    description: `URL of the report published in Bitbucket Code Insights. Only available when status is ${JobStatus.SUCCESS}.`,
+    required: false,
+  })
   codeInsightsURL?: string;
 }
-

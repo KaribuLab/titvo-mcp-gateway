@@ -21,7 +21,9 @@ import { JobStatus } from './job-status.enum';
  */
 export class IssueReportOutputDto extends PollOutputDto {
   /** URL del reporte generado (disponible solo cuando status === "SUCCESS") */
-  @StringField({ description: `URL of the generated report. Only available when status is ${JobStatus.SUCCESS}.`, required: false })
+  @StringField({
+    description: `URL of the generated report. Only available when status is ${JobStatus.SUCCESS}.`,
+    required: false,
+  })
   reportURL?: string;
 }
-
