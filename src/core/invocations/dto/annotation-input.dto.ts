@@ -1,6 +1,7 @@
 import { SchemaDto } from '../../../shared/dto/schema.dto';
 import {
   NumberField,
+  ObjectField,
   StringField,
 } from '../../../shared/dto/decorators/field.decorator';
 
@@ -29,7 +30,20 @@ import {
  * annotation.path = 'src/index.ts';
  * annotation.line = 42;
  */
+export class AcceptanceDto extends SchemaDto {
+  @StringField({ description: 'Repository-reviewed reason for accepting the risk.' })
+  reason: string;
+
+  @StringField({ description: 'Declared responsible party, not an authenticated identity.' })
+  accepted_by: string;
+
+  @StringField({ description: 'Acceptance expiry date (YYYY-MM-DD).' })
+  expires_on: string;
+}
+
 export class AnnotationDto extends SchemaDto {
+  @ObjectField({ type: AcceptanceDto, required: false, description: 'Acceptance metadata supplied by deterministic repository policy, never authorized by model content.' })
+  acceptance?: AcceptanceDto;
   /** Título breve de la anotación */
   @StringField({
     description:
