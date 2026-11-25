@@ -2,10 +2,10 @@ import {
   ArrayField,
   EnumField,
   StringField,
-} from "../../../shared/dto/decorators/field.decorator";
-import { SchemaDto } from "../../../shared/dto/schema.dto";
-import { AnnotationDto } from "./annotation-input.dto";
-import { ReportStatus } from "./report-status.enum";
+} from '../../../shared/dto/decorators/field.decorator';
+import { SchemaDto } from '../../../shared/dto/schema.dto';
+import { AnnotationDto } from './annotation-input.dto';
+import { ReportStatus } from './report-status.enum';
 
 /**
  * BitbucketCodeInsightsInputDto - DTO de entrada para publicar Code Insights en Bitbucket
@@ -39,35 +39,35 @@ export class BitbucketCodeInsightsInputDto extends SchemaDto {
   /** URL del reporte completo (externa) */
   @StringField({
     description:
-      "reportURL returned by mcp.tool.issue.report after polling to SUCCESS (Bitbucket insights link back to this HTML report).",
+      'reportURL returned by mcp.tool.issue.report after polling to SUCCESS (Bitbucket insights link back to this HTML report).',
   })
   reportURL: string;
 
   /** ID del workspace de Bitbucket */
   @StringField({
     description:
-      "Bitbucket workspace ID from the repo URL bitbucket.org/WORKSPACE/repo (often the team or user slug).",
+      'Bitbucket workspace ID from the repo URL bitbucket.org/WORKSPACE/repo (often the team or user slug).',
   })
   workspaceId: string;
 
   /** Hash del commit donde se publicará el reporte */
   @StringField({
     description:
-      "Commit SHA where annotations are published (same commit being scanned).",
+      'Commit SHA where annotations are published (same commit being scanned).',
   })
   commitHash: string;
 
   /** Slug del repositorio (nombre corto) */
   @StringField({
     description:
-      "Repository slug from bitbucket.org/workspace/REPO_SLUG (short repo name, not display name).",
+      'Repository slug from bitbucket.org/workspace/REPO_SLUG (short repo name, not display name).',
   })
   repoSlug: string;
 
   /** Estado general del reporte (SUCCESS, FAILED, WARNING) */
   @EnumField({
     description:
-      "Scan outcome label for the report: COMPLETED, WARNING, or FAILED (ReportStatus enum).",
+      'Scan outcome label for the report: COMPLETED, WARNING, or FAILED (ReportStatus enum).',
     enum: ReportStatus,
   })
   status: ReportStatus;
@@ -75,7 +75,7 @@ export class BitbucketCodeInsightsInputDto extends SchemaDto {
   /** Lista de anotaciones de código a publicar */
   @ArrayField({
     description:
-      "Inline findings for Code Insights; each item follows AnnotationDto (path and line must match files in the commit).",
+      'Inline findings for Code Insights; each item follows AnnotationDto (path and line must match files in the commit).',
     itemType: AnnotationDto,
   })
   annotations: AnnotationDto[];

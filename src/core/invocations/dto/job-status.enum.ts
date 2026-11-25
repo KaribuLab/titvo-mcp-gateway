@@ -28,4 +28,3 @@ export enum JobStatus {
   /** Job falló durante el procesamiento */
   FAILURE = 'FAILURE',
 }
-

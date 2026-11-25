@@ -47,15 +47,20 @@ export class WaitJobOutputDto extends SchemaDto {
       'Result of the job when completed successfully. Structure varies by job type. For mcp.tool.git.commit-files jobs, the result structure is: { filesPaths: string[] (array of file paths), commitId?: string (optional commit ID) }. Example: { "filesPaths": ["abc123/src/index.ts", "abc123/src/utils.ts"], "commitId": "abc123" }',
     required: false,
   })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   result?: any;
 
   /** Mensaje descriptivo del estado o error */
-  @StringField({ description: 'Descriptive message about the job status or error' })
+  @StringField({
+    description: 'Descriptive message about the job status or error',
+  })
   message: string;
 
   /** Progreso del job (0 a 100) */
-  @NumberField({ description: 'Progress of the job from 0 to 100', min: 0, max: 100, int: true })
+  @NumberField({
+    description: 'Progress of the job from 0 to 100',
+    min: 0,
+    max: 100,
+    int: true,
+  })
   progress: number;
 }
-

@@ -29,9 +29,7 @@ export abstract class PollOutputDto extends SchemaDto {
 
   /** Estado del job: "REQUESTED" | "IN_PROGRESS" | "SUCCESS" | "FAILURE". Si es "REQUESTED" o "IN_PROGRESS", el job aún está procesándose y debes llamar esta tool nuevamente más tarde. Si es "SUCCESS", el job terminó y los campos específicos estarán disponibles. Si es "FAILURE", el job falló. */
   @StringField({
-    description:
-      `Status of the job: ${JobStatus.REQUESTED} | ${JobStatus.IN_PROGRESS} | ${JobStatus.SUCCESS} | ${JobStatus.FAILURE}. If status is ${JobStatus.REQUESTED} or ${JobStatus.IN_PROGRESS}, the job is still processing and you must call this tool again later. If status is ${JobStatus.SUCCESS}, the job completed and specific fields will be available. If status is ${JobStatus.FAILURE}, the job failed.`,
+    description: `Status of the job: ${JobStatus.REQUESTED} | ${JobStatus.IN_PROGRESS} | ${JobStatus.SUCCESS} | ${JobStatus.FAILURE}. If status is ${JobStatus.REQUESTED} or ${JobStatus.IN_PROGRESS}, the job is still processing and you must call this tool again later. If status is ${JobStatus.SUCCESS}, the job completed and specific fields will be available. If status is ${JobStatus.FAILURE}, the job failed.`,
   })
   status: JobStatus;
 }
-

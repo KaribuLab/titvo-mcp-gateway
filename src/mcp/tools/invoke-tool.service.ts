@@ -1,17 +1,17 @@
-import { Inject, Injectable } from "@nestjs/common";
-import type { Context } from "@rekog/mcp-nest";
+import { Inject, Injectable } from '@nestjs/common';
+import type { Context } from '@rekog/mcp-nest';
 import {
   JOB_PERSISTENCE,
   PUBLISH_EVENT,
-} from "../../packages/cloud-contracts/constants/injection-tokens";
-import { JobPersistencePort } from "../../packages/cloud-contracts/ports/job-persistence.port";
-import { PublishEventPort } from "../../packages/cloud-contracts/ports/publish-event.port";
-import { ContextService } from "../../shared/services/context.service";
-import { InvokeAsyncTool } from "../decorators/invoke-async-tool.decorator";
-import { PollAsyncTool } from "../decorators/poll-async-tool.decorator";
-import { GetCommitInputDto } from "../../core/invocations/dto/get-commit-input.dto";
-import { WaitJobInputDto } from "../../core/invocations/dto/wait-job-input.dto";
-import { GitCommitFilesOutputDto } from "../../core/invocations/dto/git-commit-files-output.dto";
+} from '../../packages/cloud-contracts/constants/injection-tokens';
+import { JobPersistencePort } from '../../packages/cloud-contracts/ports/job-persistence.port';
+import { PublishEventPort } from '../../packages/cloud-contracts/ports/publish-event.port';
+import { ContextService } from '../../shared/services/context.service';
+import { InvokeAsyncTool } from '../decorators/invoke-async-tool.decorator';
+import { PollAsyncTool } from '../decorators/poll-async-tool.decorator';
+import { GetCommitInputDto } from '../../core/invocations/dto/get-commit-input.dto';
+import { WaitJobInputDto } from '../../core/invocations/dto/wait-job-input.dto';
+import { GitCommitFilesOutputDto } from '../../core/invocations/dto/git-commit-files-output.dto';
 
 export function mapGitCommitFilesResult(result: any) {
   // Mapear campos snake_case a camelCase
@@ -99,7 +99,7 @@ export class InvokeToolService {
     @Inject(JOB_PERSISTENCE)
     private readonly jobPersistence: JobPersistencePort,
     private readonly contextService: ContextService,
-  ) { }
+  ) {}
 
   /**
    * Tool: Obtener datos de un commit de repositorio
@@ -108,12 +108,12 @@ export class InvokeToolService {
    * desde un repositorio Git (archivos modificados, autor, mensaje, etc.)
    */
   @InvokeAsyncTool({
-    name: "mcp.tool.git.commit-files",
+    name: 'mcp.tool.git.commit-files',
     description:
-      "Fetches files for analysis (GitHub, Bitbucket, or any Git URL). Defaults to scanMode=commit to retrieve changed files for commitId. Use scanMode=full with branch to retrieve all files at the selected branch/ref. Returns jobId and pollToolName; you MUST poll until SUCCESS to read filesPaths.",
+      'Fetches files for analysis (GitHub, Bitbucket, or any Git URL). Defaults to scanMode=commit to retrieve changed files for commitId. Use scanMode=full with branch to retrieve all files at the selected branch/ref. Returns jobId and pollToolName; you MUST poll until SUCCESS to read filesPaths.',
     dtoClass: GetCommitInputDto,
-    pollToolName: "mcp.tool.git.commit-files.poll",
-    title: "Get commit files for security analysis",
+    pollToolName: 'mcp.tool.git.commit-files.poll',
+    title: 'Get commit files for security analysis',
     destructiveHint: false,
     readOnlyHint: true,
     idempotentHint: true,
@@ -158,5 +158,4 @@ export class InvokeToolService {
     // Este método nunca se ejecuta directamente, el decorador lo reemplaza completamente
     return {} as GitCommitFilesOutputDto;
   }
-
 }

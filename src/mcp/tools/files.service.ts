@@ -1,16 +1,16 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
-import { Tool, type Context } from "@rekog/mcp-nest";
-import { GetDataFromFileInputDto } from "src/core/invocations/dto/get-data-from-file-input.dto";
-import { GetDataFromFileOutputDto } from "src/core/invocations/dto/get-data-from-file-output.dto";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Tool, type Context } from '@rekog/mcp-nest';
+import { GetDataFromFileInputDto } from 'src/core/invocations/dto/get-data-from-file-input.dto';
+import { GetDataFromFileOutputDto } from 'src/core/invocations/dto/get-data-from-file-output.dto';
 import {
   GET_DATA_FROM_FILE,
   JOB_PERSISTENCE,
   PUBLISH_EVENT,
-} from "../../packages/cloud-contracts/constants/injection-tokens";
-import { JobPersistencePort } from "../../packages/cloud-contracts/ports/job-persistence.port";
-import { PublishEventPort } from "../../packages/cloud-contracts/ports/publish-event.port";
-import { ContextService } from "../../shared/services/context.service";
-import { GetDataFromFilePort } from "src/packages/cloud-contracts/ports/get-data-from-file.port";
+} from '../../packages/cloud-contracts/constants/injection-tokens';
+import { JobPersistencePort } from '../../packages/cloud-contracts/ports/job-persistence.port';
+import { PublishEventPort } from '../../packages/cloud-contracts/ports/publish-event.port';
+import { ContextService } from '../../shared/services/context.service';
+import { GetDataFromFilePort } from 'src/packages/cloud-contracts/ports/get-data-from-file.port';
 
 /**
  * InvokeToolService - Servicio que expone tools MCP para invocar operaciones
@@ -49,7 +49,8 @@ import { GetDataFromFilePort } from "src/packages/cloud-contracts/ports/get-data
 export class FilesService {
   private readonly logger = new Logger(FilesService.name);
   constructor(
-    @Inject(GET_DATA_FROM_FILE) private readonly getDataFromFilePort: GetDataFromFilePort,
+    @Inject(GET_DATA_FROM_FILE)
+    private readonly getDataFromFilePort: GetDataFromFilePort,
   ) {}
 
   /**
@@ -58,12 +59,14 @@ export class FilesService {
    * Invoca una operación para obtener el contenido de un archivo
    */
   @Tool({
-    name: "mcp.tool.files",
-    description: "Get data from files path returned by the array filesPaths from mcp.tool.git.commit-files.poll result. First invoke mcp.tool.git.commit-files, then use the pollToolName returned to get the filesPaths array, then use this tool with each path from that array.",
+    name: 'mcp.tool.files',
+    description:
+      'Get data from files path returned by the array filesPaths from mcp.tool.git.commit-files.poll result. First invoke mcp.tool.git.commit-files, then use the pollToolName returned to get the filesPaths array, then use this tool with each path from that array.',
     parameters: GetDataFromFileInputDto.schema(),
     outputSchema: GetDataFromFileOutputDto.schema(),
     annotations: {
-      title: "Execute get data from files path returned by the array filesPaths from mcp.tool.git.commit-files.poll result",
+      title:
+        'Execute get data from files path returned by the array filesPaths from mcp.tool.git.commit-files.poll result',
       destructiveHint: false,
       readOnlyHint: true,
       idempotentHint: true,

@@ -23,7 +23,9 @@ export class InvokeAsyncOutputDto extends SchemaDto {
   jobId: string;
 
   /** Nombre de la tool de polling a usar para obtener el resultado */
-  @StringField({ description: 'The name of the polling tool to use to get the result' })
+  @StringField({
+    description: 'The name of the polling tool to use to get the result',
+  })
   pollToolName: string;
 
   constructor(jobId: string, pollToolName: string) {
@@ -32,4 +34,3 @@ export class InvokeAsyncOutputDto extends SchemaDto {
     this.pollToolName = pollToolName;
   }
 }
-

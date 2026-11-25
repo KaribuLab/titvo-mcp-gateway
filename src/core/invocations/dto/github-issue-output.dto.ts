@@ -1,4 +1,7 @@
-import { StringField, NumberField } from '../../../shared/dto/decorators/field.decorator';
+import {
+  StringField,
+  NumberField,
+} from '../../../shared/dto/decorators/field.decorator';
 import { PollOutputDto } from './poll-output.dto';
 import { JobStatus } from './job-status.enum';
 
@@ -22,11 +25,17 @@ import { JobStatus } from './job-status.enum';
  */
 export class GithubIssueOutputDto extends PollOutputDto {
   /** ID del issue creado en GitHub (disponible solo cuando status === "SUCCESS") */
-  @NumberField({ description: `ID of the issue created in GitHub. Only available when status is ${JobStatus.SUCCESS}.`, required: false, int: true })
+  @NumberField({
+    description: `ID of the issue created in GitHub. Only available when status is ${JobStatus.SUCCESS}.`,
+    required: false,
+    int: true,
+  })
   issueId?: number;
 
   /** URL HTML del issue creado en GitHub (disponible solo cuando status === "SUCCESS") */
-  @StringField({ description: `HTML URL of the issue created in GitHub. Only available when status is ${JobStatus.SUCCESS}.`, required: false })
+  @StringField({
+    description: `HTML URL of the issue created in GitHub. Only available when status is ${JobStatus.SUCCESS}.`,
+    required: false,
+  })
   htmlURL?: string;
 }
-

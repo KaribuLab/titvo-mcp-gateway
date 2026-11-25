@@ -192,7 +192,7 @@ export class AwsQueueConsumerAdapter implements QueueConsumerPort {
       // Procesar mensajes si hay alguno
       if (response.Messages && response.Messages.length > 0) {
         this.logger.log(`Received ${response.Messages.length} message(s)`);
-        
+
         // Procesar todos los mensajes en paralelo para mejor throughput
         await Promise.all(
           response.Messages.map((message) => this.handleSQSMessage(message)),

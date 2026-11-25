@@ -70,7 +70,7 @@ import { HealthcheckModule } from './packages/healthcheck/healthcheck.module';
         statelessMode: false, // Enables session management
       },
     }),
-    HealthcheckModule
+    HealthcheckModule,
   ],
   providers: [
     ContextService,

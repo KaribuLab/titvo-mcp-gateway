@@ -21,4 +21,3 @@ export class WaitJobInputDto extends SchemaDto {
   @StringField({ description: 'The ID of the job to wait for completion' })
   jobId: string;
 }
-

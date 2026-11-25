@@ -2,10 +2,10 @@ import {
   ArrayField,
   EnumField,
   StringField,
-} from "../../../shared/dto/decorators/field.decorator";
-import { SchemaDto } from "../../../shared/dto/schema.dto";
-import { AnnotationDto } from "./annotation-input.dto";
-import { ReportStatus } from "./report-status.enum";
+} from '../../../shared/dto/decorators/field.decorator';
+import { SchemaDto } from '../../../shared/dto/schema.dto';
+import { AnnotationDto } from './annotation-input.dto';
+import { ReportStatus } from './report-status.enum';
 
 /**
  * GithubIssueInputDto - DTO de entrada para crear issues en GitHub
@@ -40,35 +40,35 @@ export class GithubIssueInputDto extends SchemaDto {
   /** Propietario del repositorio (organización o usuario) */
   @StringField({
     description:
-      "GitHub repository owner: the organization or user from the URL github.com/OWNER/REPO (same value as in the scan context).",
+      'GitHub repository owner: the organization or user from the URL github.com/OWNER/REPO (same value as in the scan context).',
   })
   repoOwner: string;
 
   /** Nombre del repositorio */
   @StringField({
     description:
-      "GitHub repository name: the repo segment from github.com/owner/REPO (without .git).",
+      'GitHub repository name: the repo segment from github.com/owner/REPO (without .git).',
   })
   repoName: string;
 
   /** Usuario de GitHub a quien se asignará el issue */
   @StringField({
     description:
-      "GitHub username to assign the issue to (must exist on GitHub; often provided in scan parameters).",
+      'GitHub username to assign the issue to (must exist on GitHub; often provided in scan parameters).',
   })
   asignee: string;
 
   /** Hash del commit relacionado con el issue */
   @StringField({
     description:
-      "Full commit SHA for the issue title and body (same commit being scanned).",
+      'Full commit SHA for the issue title and body (same commit being scanned).',
   })
   commitHash: string;
 
   /** Estado del análisis (SUCCESS, FAILED, WARNING) */
   @EnumField({
     description:
-      "Overall scan outcome for the issue template: COMPLETED, WARNING, or FAILED (ReportStatus enum—same values as issue report).",
+      'Overall scan outcome for the issue template: COMPLETED, WARNING, or FAILED (ReportStatus enum—same values as issue report).',
     enum: ReportStatus,
   })
   status: ReportStatus;
@@ -76,7 +76,7 @@ export class GithubIssueInputDto extends SchemaDto {
   /** Lista de anotaciones que generarán el contenido del issue */
   @ArrayField({
     description:
-      "Vulnerabilities to include in the issue body; each item follows AnnotationDto (title, description, severity, path, line, summary, code, recommendation).",
+      'Vulnerabilities to include in the issue body; each item follows AnnotationDto (title, description, severity, path, line, summary, code, recommendation).',
     itemType: AnnotationDto,
   })
   annotations: AnnotationDto[];

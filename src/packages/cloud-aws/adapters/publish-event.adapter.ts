@@ -80,7 +80,7 @@ export class AwsPublishEventAdapter implements PublishEventPort {
       const input = InvokeInputFactory.create(topic, payload);
       const entry: PutEventsRequestEntry = {
         Source: topic, // Identificador de la aplicación que envía el evento
-        DetailType: "input", // Tipo de evento (ej: 'user.created', 'order.placed')
+        DetailType: 'input', // Tipo de evento (ej: 'user.created', 'order.placed')
         Detail: JSON.stringify(CaseConversionHelper.convertToSnakeCase(input)), // Payload serializado a JSON
         EventBusName: this.eventBusName, // EventBus de destino
       };

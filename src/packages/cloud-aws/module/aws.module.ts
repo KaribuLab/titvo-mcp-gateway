@@ -62,7 +62,13 @@ export class AwsModule {
         // Paso 1: Validar que todas las variables requeridas estén presentes
         const envVars = validateRequiredEnvVars(
           configService,
-          ['AWS_REGION', 'AWS_EVENTBUS_NAME', 'AWS_QUEUE_URL', 'AWS_DYNAMODB_TABLE_NAME', 'AWS_S3_BUCKET_NAME'],
+          [
+            'AWS_REGION',
+            'AWS_EVENTBUS_NAME',
+            'AWS_QUEUE_URL',
+            'AWS_DYNAMODB_TABLE_NAME',
+            'AWS_S3_BUCKET_NAME',
+          ],
           'AWS',
         );
 
@@ -117,7 +123,7 @@ export class AwsModule {
       inject: ['AWS_OPTIONS'],
     };
 
-        /**
+    /**
      * Provider de persistencia de mensajes (DynamoDB)
      *
      * Crea una instancia del adapter que persiste mensajes en DynamoDB.
@@ -139,7 +145,12 @@ export class AwsModule {
         jobPersistenceProvider,
         getDataFromFileProvider,
       ],
-      exports: [PUBLISH_EVENT, QUEUE_CONSUMER, JOB_PERSISTENCE, GET_DATA_FROM_FILE], // Exportar para inyección en otros módulos
+      exports: [
+        PUBLISH_EVENT,
+        QUEUE_CONSUMER,
+        JOB_PERSISTENCE,
+        GET_DATA_FROM_FILE,
+      ], // Exportar para inyección en otros módulos
     };
   }
 }

@@ -24,28 +24,41 @@ import { JobStatus } from './job-status.enum';
  * output.commitId = 'abc123';
  */
 export class GitCommitFilesOutputDto extends PollOutputDto {
-
   /** Array de paths de archivos procesados (disponible solo cuando status === "SUCCESS") */
   @ArrayField({
-    description: 'Array of file paths returned by the job when completed. Only available when status is "SUCCESS".',
+    description:
+      'Array of file paths returned by the job when completed. Only available when status is "SUCCESS".',
     itemType: String,
     required: false,
   })
   filesPaths?: string[];
 
   /** ID del commit procesado (disponible solo cuando status === "SUCCESS") */
-  @StringField({ description: 'Commit ID that was processed. Only available when status is "SUCCESS".', required: false })
+  @StringField({
+    description:
+      'Commit ID that was processed. Only available when status is "SUCCESS".',
+    required: false,
+  })
   commitId?: string;
 
   /** Modo de escaneo usado por el worker */
-  @StringField({ description: 'Scan mode used by the worker: commit or full.', required: false })
+  @StringField({
+    description: 'Scan mode used by the worker: commit or full.',
+    required: false,
+  })
   scanMode?: string;
 
   /** Ref/rama usada para el snapshot de archivos */
-  @StringField({ description: 'Branch or ref used to retrieve files.', required: false })
+  @StringField({
+    description: 'Branch or ref used to retrieve files.',
+    required: false,
+  })
   scanRef?: string;
 
   /** Prefijo S3 usado para almacenar los archivos recuperados */
-  @StringField({ description: 'Storage prefix used for returned file paths.', required: false })
+  @StringField({
+    description: 'Storage prefix used for returned file paths.',
+    required: false,
+  })
   storagePrefix?: string;
 }

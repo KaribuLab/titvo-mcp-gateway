@@ -33,5 +33,4 @@ export interface GetDataFromFilePort {
    * @throws Error si la operación falla
    */
   getData(path: string): Promise<GetDataFromFileOutputDto>;
-
 }
