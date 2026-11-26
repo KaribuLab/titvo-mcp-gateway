@@ -2,8 +2,8 @@ locals {
   region = get_env("AWS_REGION")
   stage  = get_env("AWS_STAGE")
   stages = {
-    localstack = {
-      name = "Localstack"
+    local = {
+      name = "Local"
     }
     test = {
       name = "Testing"

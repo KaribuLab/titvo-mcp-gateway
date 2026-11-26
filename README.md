@@ -23,7 +23,7 @@ Un gateway MCP (Model Context Protocol) multi-cloud construido con NestJS y arqu
 - 📦 **Preparado para NPM**: Estructura modular lista para extraer paquetes independientes
 - 🔌 **Decoradores Personalizados**: `@InvokeTool` para simplificar creación de tools
 - ✅ **Schemas Dinámicos**: Generación automática de schemas Zod desde decoradores
-- 🧪 **LocalStack Ready**: Prueba con AWS local antes de ir a producción
+- 🧪 **MiniStack Ready**: Prueba con AWS local antes de ir a producción
 
 ## 🏛️ Arquitectura
 
@@ -75,7 +75,7 @@ Un gateway MCP (Model Context Protocol) multi-cloud construido con NestJS y arqu
 
 - Node.js >= 18.x
 - Yarn o npm
-- Docker (para Redis/LocalStack)
+- Docker (para Redis/MiniStack)
 
 ### Instalación
 
@@ -102,7 +102,7 @@ LOCAL_QUEUE_NAME=events-queue
 LOCAL_RESULT_QUEUE_NAME=results-queue
 ```
 
-#### Opción 2: AWS con LocalStack
+#### Opción 2: AWS con MiniStack
 
 ```bash
 CLOUD_PROVIDER=aws
@@ -284,23 +284,23 @@ Retorna:
 }
 ```
 
-## 🧪 Probar con LocalStack
+## 🧪 Probar con MiniStack
 
-### 1. Levantar LocalStack
+### 1. Levantar MiniStack
 
 ```bash
-# Crear docker-compose.localstack.yml
-docker-compose -f docker-compose.localstack.yml up -d
+# Crear docker-compose.yaml
+docker-compose -f docker-compose.yaml up -d
 ```
 
 ### 2. Configurar Recursos AWS
 
 ```bash
 # Ejecutar script de setup
-./setup-localstack.sh
+./setup-ministack.sh
 ```
 
-Ver guía completa en: [`docs/LOCALSTACK_SETUP.md`](./docs/LOCALSTACK_SETUP.md)
+Ver guía completa en: [`docs/MINISTACK_SETUP.md`](./docs/MINISTACK_SETUP.md)
 
 ## 📚 Documentación por Provider
 
@@ -371,9 +371,9 @@ yarn test:cov
 docker-compose up -d
 ```
 
-### AWS (con LocalStack primero)
+### AWS (con MiniStack primero)
 
-1. Probar con LocalStack
+1. Probar con MiniStack
 2. Crear recursos en AWS real (EventBridge, SQS, DynamoDB)
 3. Actualizar variables de entorno
 4. Desplegar aplicación (ECS, Lambda, EC2, etc.)
@@ -399,7 +399,7 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](L
 - [NestJS](https://nestjs.com/) - Framework backend
 - [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) - Protocolo de comunicación
 - [BullMQ](https://bullmq.io/) - Cola de jobs para desarrollo local
-- [LocalStack](https://localstack.cloud/) - Emulador AWS local
+- [MiniStack](https://ministack.org/) - Emulador AWS local
 
 ## 📞 Contacto
 

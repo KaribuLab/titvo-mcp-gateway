@@ -33,6 +33,8 @@ export class AwsGetDataFromFileAdapter implements GetDataFromFilePort {
     this.s3Client = new S3Client({
       region: options.region,
       endpoint: process.env.AWS_ENDPOINT_URL,
+      // Con endpoint propio (emulador local) no hay DNS por bucket.
+      forcePathStyle: process.env.AWS_ENDPOINT_URL !== undefined,
     });
 
     // Validar y guardar el nombre del bucket
